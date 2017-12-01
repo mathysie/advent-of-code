@@ -1,2 +1,2 @@
 # advent-of-code
-My solutions to Advent of Code
+This repository contains my solutions to Advent of Code. More information on Advent of Code can be viewed at https://adventofcode.com/.
