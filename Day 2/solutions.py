@@ -9,7 +9,7 @@ def read_input ():
 
 	return spreadsheet
 
-def calc_checksum(sheet):
+def calc_minmaxsum(sheet):
 	checksum = 0
 
 	for i in range(0,len(sheet)):
@@ -18,4 +18,4 @@ def calc_checksum(sheet):
 	return checksum
 
 sheet = read_input()
-print calc_checksum(sheet)
+print calc_minmaxsum(sheet)
