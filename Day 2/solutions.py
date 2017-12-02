@@ -2,7 +2,7 @@ def read_input ():
 	spreadsheet = []
 	while True:
 	    try:
-	        line = [int(i) for i in raw_input().split(" ")]
+	        line = [int(i) for i in raw_input().split('\t')]
 	    except EOFError:
 	        break
 	    spreadsheet.append(line)
