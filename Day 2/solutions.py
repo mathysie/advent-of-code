@@ -17,5 +17,23 @@ def calc_minmaxsum(sheet):
 
 	return checksum
 
+def calc_evenlydevidesum(sheet):
+	checksum = 0
+
+	for i in range(0, len(sheet)):
+		sheet[i].sort(reverse=True)
+		Found = False
+		for j in range(0, len(sheet[i])):
+			for k in range(j + 1, len(sheet[i])):
+				if (sheet[i][j] % sheet[i][k] == 0):
+					checksum += sheet[i][j] / sheet[i][k]
+					Found = True
+					break
+			if (Found):
+				break
+
+	return checksum
+
 sheet = read_input()
 print calc_minmaxsum(sheet)
+print calc_evenlydevidesum(sheet)
