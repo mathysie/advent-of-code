@@ -1,4 +1,38 @@
 import math as m
+import numpy as np
+
+
+def entry(array, i, j):
+    return array[i + 1][j - 1] + array[i + 1][j] + array[i + 1][j + 1] + array[i][j - 1] + array[i][j + 1] + array[i - 1][j + 1] + array[i - 1][j] + array[i - 1][j - 1]
+
+
+def value(number):
+    N = 11
+    coordinates = np.zeros((N, N))
+    i = N / 2
+    j = N / 2
+    result = 0
+
+    coordinates[i][j] = 1
+    j += 1
+
+    while (result < number):
+        coordinates[i][j] = entry(coordinates, i, j)
+        result = coordinates[i][j]
+
+        if (coordinates[i][j - 1] != 0 and coordinates[i - 1][j] == 0):
+            i -= 1
+        elif (coordinates[i + 1][j] != 0 and coordinates[i][j - 1] == 0):
+            j -= 1
+        elif (coordinates[i][j + 1] != 0 and coordinates[i + 1][j] == 0):
+            i += 1
+        elif (coordinates[i - 1][j] != 0 and coordinates[i][j + 1] == 0):
+            j += 1
+        else:
+            print "Error"
+
+    print coordinates
+    return result
 
 
 def man_dist(number):
@@ -21,3 +55,4 @@ def man_dist(number):
 
 number = int(raw_input())
 print man_dist(number)
+print value(number)
