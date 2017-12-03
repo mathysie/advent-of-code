@@ -3,12 +3,16 @@ import numpy as np
 
 
 def entry(array, i, j):
-    return array[i + 1][j - 1] + array[i + 1][j] + array[i + 1][j + 1] + array[i][j - 1] + array[i][j + 1] + array[i - 1][j + 1] + array[i - 1][j] + array[i - 1][j - 1]
+    result = array[i + 1][j - 1] + array[i + 1][j] + array[i + 1][j + 1] \
+        + array[i - 1][j - 1] + array[i - 1][j] + array[i - 1][j + 1] \
+        + array[i][j - 1] + array[i][j + 1]
+
+    return result
 
 
 def value(number):
     N = 11
-    coordinates = np.zeros((N, N))
+    coordinates = np.zeros((N, N), np.int32)
     i = N / 2
     j = N / 2
     result = 0
@@ -31,7 +35,6 @@ def value(number):
         else:
             print "Error"
 
-    print coordinates
     return result
 
 
