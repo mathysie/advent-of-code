@@ -16,6 +16,7 @@ def amount_cycles(sequence):
         count += 1
         for i in range(0, count):
             if (memory[i] == memory[count]):
+                print count - i
                 cycle = True
                 break
         if (cycle):
