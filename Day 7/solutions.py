@@ -1,3 +1,31 @@
+import numpy as np
+
+
+def bottom_program(tree):
+    programs = count_programs(tree)
+
+    return min(programs, key=programs.get)
+
+
+def count_program(counter, program):
+    if (program in counter):
+        counter[program] += 1
+    else:
+        counter[program] = 1
+
+
+def count_programs(tree):
+    counter = dict()
+
+    for program in tree:
+        count_program(counter, program)
+
+        if (len(tree[program][1]) > 0):
+            for i in range(0, len(tree[program][1])):
+                count_program(counter, tree[program][1][i])
+
+    return counter
+
 def weight_subprogram(program, tree):
     weight = tree[program][0]
     for i in range(0, len(tree[program][1])):
@@ -40,4 +68,5 @@ def read_input():
 
 
 tree = read_input()
+print bottom_program(tree)
 get_wrong_weight(tree)
