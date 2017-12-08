@@ -27,7 +27,7 @@ def update_register(register, line):
         register[line[0]] -= int(line[2])
 
 
-def fill_register(register, lines):
+def fill_register(register, lines, maximum):
     for line in lines:
         if (line[5] == "=="):
             if (register[line[4]] == int(line[6])):
@@ -48,12 +48,17 @@ def fill_register(register, lines):
             if (register[line[4]] > int(line[6])):
                 update_register(register, line)
 
+        if (max(register.values()) > maximum[0]):
+            maximum[0] = max(register.values())
+
 
 def largest_value(lines):
+    maximum = [0]  # Call by reference done like Python :-|
     register = build_register(lines)
-    fill_register(register, lines)
+    fill_register(register, lines, maximum)
 
-    return max(register.values())
+    print max(register.values())
+    return maximum[0]
 
 
 lines = read_input()
