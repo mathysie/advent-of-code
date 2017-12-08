@@ -1,10 +1,23 @@
 import numpy as np
 
 
-def bottom_program(tree):
-    programs = count_programs(tree)
+def read_input():
+    weights = dict()
+    while True:
+        try:
+            line = raw_input().split(' ')
+            if (len(line) > 2):
+                subs = []
+                for i in range(3, len(line) - 1):
+                    subs.append(line[i][:-1])
+                subs.append(line[len(line) - 1])
+                weights[line[0]] = [int(line[1][1:-1]), subs]
+            else:
+                weights[line[0]] = [int(line[1][1:-1]), []]
+        except EOFError:
+            break
 
-    return min(programs, key=programs.get)
+    return weights
 
 
 def count_program(counter, program):
@@ -26,6 +39,22 @@ def count_programs(tree):
 
     return counter
 
+
+def bottom_program(tree):
+    programs = count_programs(tree)
+
+    return min(programs, key=programs.get)
+
+
+def get_weights(tree):
+    weights = dict()
+
+    for program in tree:
+        weights[program] = weight_subprogram(program, tree)
+
+    return weights
+
+
 def weight_subprogram(program, tree):
     weight = tree[program][0]
     for i in range(0, len(tree[program][1])):
@@ -34,39 +63,36 @@ def weight_subprogram(program, tree):
     return weight
 
 
-def get_wrong_weight(tree):
-    weights = dict()
-    for program in tree:
-        weights[program] = weight_subprogram(program, tree)
-
+def first_disbalance(tree, weights):
     for program in tree:
         if (len(tree[program][1]) > 0):
             for i in range(1, len(tree[program][1])):
                 if (weights[tree[program][1][i]] != weights[tree[program][1][0]]):
-                    print program
-                    for j in tree[program][1]:
-                        print weights[j]
+                    return [program, abs(weights[tree[program][1][i]] - weights[tree[program][1][0]])]
 
 
-def read_input():
-    weights = dict()
-    while True:
-        try:
-            line = raw_input().split(' ')
-            if (len(line) > 2):
-                subs = []
-                for i in range(3, len(line) - 1):
-                    subs.append(line[i][:-1])
-                subs.append(line[len(line) - 1])
-                weights[line[0]] = [int(line[1][1:-1]), subs]
+def wrong_program(tree, weights, start):
+    for i in range(1, len(tree[start][1])):
+        if (weights[tree[start][1][i]] != weights[tree[start][1][0]]):
+            if (i == 1 and weights[tree[start][1][2]] != weights[tree[start][1][0]]):
+                start = tree[start][1][0]
+                return wrong_program(tree, weights, start)
             else:
-                weights[line[0]] = [int(line[1][1:-1]), []]
-        except EOFError:
-            break
+                start = tree[start][1][i]
+                return wrong_program(tree, weights, start)
 
-    return weights
+    return start
+
+
+def get_intended_weight(tree):
+    weights = get_weights(tree)
+    start = first_disbalance(tree, weights)
+    end_program = wrong_program(tree, weights, start[0])
+    print "Einde: ", end_program
+
+    return tree[end_program][0] - start[1]
 
 
 tree = read_input()
 print bottom_program(tree)
-get_wrong_weight(tree)
+print get_intended_weight(tree)
