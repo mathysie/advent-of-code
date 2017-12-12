@@ -15,12 +15,9 @@ def count_groups(pipes):
 
     group_count = 0
     numbers = set(range(0, len(pipes)))
-    groups = []
 
     while len(numbers) > 0:
-        group = form_group(pipes, list(numbers)[0])
-        groups.append(group)
-        numbers -= set(group)
+        numbers -= form_group(pipes, list(numbers)[0])
         group_count += 1
 
     return group_count
@@ -32,7 +29,7 @@ def form_group(pipes, start):
 
     while (len(new) > 0):
         temp = set(new)
-        for i in new:
+        for i in iter(new):
             temp |= pipes[i] - group
             group |= pipes[i] | set([i])
             temp.remove(i)
