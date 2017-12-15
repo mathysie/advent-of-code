@@ -99,10 +99,32 @@ def create_grid(key_string):
     return grid
 
 
+def fill_region(grid, regions, i, j):
+    new = []
+    grid[i][j] = regions
+    if (i > 0 and grid[i - 1][j] == "#"):
+        new.append([i - 1, j])
+    if (i < 127 and grid[i + 1][j] == "#"):
+        new.append([i + 1, j])
+    if (j > 0 and grid[i][j - 1] == "#"):
+        new.append([i, j - 1])
+    if (j < 127 and grid[i][j + 1] == "#"):
+        new.append([i, j + 1])
+
+    for coord in new:
+        fill_region(grid, regions, coord[0], coord[1])
+
+
 def count_regions(key_string):
     regions = 0
     grid = create_grid(key_string)
     print used_squares(grid)
+
+    for i in range(0, 128):
+        for j in range(0, 128):
+            if (grid[i][j] == "#"):
+                regions += 1
+                fill_region(grid, regions, i, j)
 
     return regions
 
