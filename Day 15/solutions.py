@@ -36,20 +36,19 @@ def new_judge_count(start):
     N = 5 * 10 ** 6
     valueA = start[0]
     valueB = start[1]
-    values = [[], []]
-
-    while (len(values[0]) < N):
-        valueA = calc_valueA(valueA)
-        if valueA % 4 == 0:
-            values[0].append(valueA)
-
-    while (len(values[1]) < N):
-        valueB = calc_valueB(valueB)
-        if valueB % 8 == 0:
-            values[1].append(valueB)
 
     for i in range(0, N):
-        if is_pair(values[0][i], values[1][i]):
+        while True:
+            valueA = calc_valueA(valueA)
+            if valueA % 4 == 0:
+                break
+
+        while True:
+            valueB = calc_valueB(valueB)
+            if valueB % 8 == 0:
+                break
+
+        if is_pair(valueA, valueB):
             count += 1
 
     return count
