@@ -112,7 +112,8 @@ def fill_region(grid, regions, i, j):
         new.append([i, j + 1])
 
     for coord in new:
-        fill_region(grid, regions, coord[0], coord[1])
+        if grid[coord[0]][coord[1]] == "#":
+            fill_region(grid, regions, coord[0], coord[1])
 
 
 def count_regions(key_string):
