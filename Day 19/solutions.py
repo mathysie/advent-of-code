@@ -16,6 +16,7 @@ def read_letters():
     j = 0
     d = True  # positive or negative direction
     vert = True
+    steps = 0
 
     for k in range(0, len(network[0])):
         if network[0][k] == "|":
@@ -39,6 +40,7 @@ def read_letters():
                     d = False
                     i -= 1
             vert = not vert
+            steps += 1
             continue
 
         if (network[i][j].isalpha()):
@@ -56,7 +58,10 @@ def read_letters():
         elif not d and not vert:
             j -= 1
 
-    return "".join(letter)
+        steps += 1
+
+    print("".join(letter))
+    return steps
 
 
 network = read_input()
