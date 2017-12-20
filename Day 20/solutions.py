@@ -39,6 +39,7 @@ def amount_collisions(particles):
     for i in range(0, N):
         collided = set([])
         update_particles()
+
         particles = sorted(particles, key=lambda k: k["p2"])
         particles = sorted(particles, key=lambda k: k["p1"])
         particles = sorted(particles, key=lambda k: k["p0"])
@@ -48,8 +49,6 @@ def amount_collisions(particles):
                 collided.add(j + 1)
 
         collided = sorted(collided, reverse=True)
-        if (len(collided) > 0):
-            print(collided)
         for j in collided:
             del particles[j]
 
