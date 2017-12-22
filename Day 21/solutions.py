@@ -133,3 +133,4 @@ def size_after(M):
 
 rules = read_input()
 print(size_after(5))
+print(size_after(18))
