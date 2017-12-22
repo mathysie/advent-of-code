@@ -1,23 +1,9 @@
-from numpy import rot90
-
-
 def read_input():
-    rules = list()
+    rules = dict()
     while True:
         try:
             line = input().split(" => ")
-            line[0] = line[0].split("/")
-
-            grid_in = []
-            for i in range(0, len(line[0])):
-                grid_in.append([list(line[0])[i]])
-
-            line[1] = line[1].split("/")
-            grid_out = []
-            for i in range(0, len(line[0])):
-                grid_out.append([list(line[1])[i]])
-
-            rules.append([grid_in, grid_out])
+            rules[line[0]] = line[1]
         except EOFError:
             break
 
@@ -25,22 +11,34 @@ def read_input():
 
 
 def initial_grid():
-    return [
-        [".", "#", "."],
-            [".", ".", "#"],
-            ["#", "#", "#"]
-    ]
+    return ".#./..#/###"
+
+
+def flip(grid):
+    rows = grid.split("/")
+    newgrid = []
+    for i in range(1, len(rows) + 1):
+        newgrid.append(rows[-i])
+
+    return "/".join(newgrid)
+
+
+def rotate(grid):
+    rows = grid.split("/")
+    newgrid = []
+    newgrid.append([grid[0][2], grid[1][2], grid[2][2]])
 
 
 def find_rule(grid):
     for rule in rules:
-        temp = rule[0]
-        print(temp)
-        if (grid == temp or grid == rot90(temp, 1) or grid == rot90(temp, 2) or grid == rot90(temp, 3)):
-            return rule
-        temp = temp[::-1]
-        if (grid == temp or grid == rot90(temp, 1) or grid == rot90(temp, 2) or grid == rot90(temp, 3)):
-            return rule
+        for i in range(0, 8):
+            if (grid == rule):
+                return rule
+            else:
+                if (i == 4):
+                    grid = flip(grid)
+                else:
+                    grid = rotate(grid)
 
     print("No rule found!")
 
@@ -55,19 +53,7 @@ def size_after_5():
     grids = []
 
     for i in range(0, 5):
-        if (len(grid[0]) % 2):
-            N = 2
-        elif (len(grid[0]) % 3):
-            N = 3
-
-        for k in range(0, int(len(grid[0]) / N)):
-            for j in range(0, int(len(grid[0]) / N)):
-                grids.append(grid[N * k:N * k + 1][N * j:N * j + 1])
-        enhance_grids(grids)
-        grid = []
-        for k in range(0, int(len(grid[0]) / N)):
-            for j in range(0, int(len(grid[0]) / N)):
-                grid[N * k:N * k + 1][N * j:N * j + 1] = grids[N * k + j]
+        enhance_grids(grid)
 
     return len(grid[0])
 
