@@ -81,6 +81,8 @@ def rotate(grid):
 
 def find_rule(grid):
     for rule in rules:
+        if len(rule) != len(grid):
+            continue
         for i in range(0, 8):
             if (grid == rule):
                 return rule
@@ -127,7 +129,6 @@ def size_after(M):
             grids[i] = rules[find_rule(grids[i])].split("/")
 
         grid = form_grid(grids)
-        print(N)
 
     return pixels(grid)
 
