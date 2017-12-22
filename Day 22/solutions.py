@@ -26,7 +26,7 @@ def build_grid(N):
 
 
 def infections():
-    N = 999  # Pick a random uneven number with no out of bounds
+    N = 239  # Pick a random uneven number with no out of bounds
     grid = build_grid(N)
     i = int((N - 1) / 2)
     j = int((N - 1) / 2)
@@ -63,7 +63,6 @@ def infections():
             i += 1
         elif direction == "w":
             j -= 1
-        print(k)
 
     return counter
 
