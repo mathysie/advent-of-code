@@ -1,3 +1,6 @@
+from sympy import isprime
+
+
 def read_input():
     commands = []
     while True:
@@ -63,5 +66,21 @@ def times_mul():
 
     return amount_mul
 
+
+def value_h():
+    b = 109300
+    c = 126300
+    h = 0
+
+    while b != c:
+        if not isprime(b):
+            h += 1
+        b += 17
+    if not isprime(b):
+        h += 1
+
+    return h
+
 commands = read_input()
 print(times_mul())
+print(value_h())
