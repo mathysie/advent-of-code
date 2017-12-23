@@ -29,7 +29,8 @@ def duet():
             elif len(queue[player]) == 0:
                 player = (player + 1) % 2
 
-        if not (commands[i[player]][1].isnumeric() or commands[i[player]][1] in registers[player]):
+        if not (commands[i[player]][1].isnumeric() \
+                or commands[i[player]][1] in registers[player]):
             registers[player][commands[i[player]][1]] = 0
 
         if commands[i[player]][0] == "set":
@@ -79,7 +80,9 @@ def duet():
                     commands[i[player]][1]] = queue[player].pop(0)
                 wait[player] = False
 
-        elif commands[i[player]][0] == "jgz" and ((commands[i[player]][1].isnumeric() and int(commands[i[player]][1]) > 0) or registers[player][commands[i[player]][1]] > 0):
+        elif commands[i[player]][0] == "jgz" \
+                and ((commands[i[player]][1].isnumeric() and int(commands[i[player]][1]) > 0) \
+                or registers[player][commands[i[player]][1]] > 0):
             if isinstance(commands[i[player]][2], int):
                 i[player] += commands[i[player]][2]
             else:

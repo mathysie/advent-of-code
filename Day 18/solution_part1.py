@@ -47,7 +47,9 @@ def do_program():
             if registers[commands[i][1]] > 0:
                 return sound
 
-        if commands[i][0] == "jgz" and ((commands[i][1].isnumeric() and int(commands[i][1]) > 0) or registers[commands[i][1]] > 0):
+        if commands[i][0] == "jgz" \
+                and ((commands[i][1].isnumeric() and int(commands[i][1]) > 0) \
+                or registers[commands[i][1]] > 0):
             if isinstance(commands[i][2], int):
                 i += commands[i][2]
             else:
