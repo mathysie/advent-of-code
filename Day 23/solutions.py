@@ -72,12 +72,9 @@ def value_h():
     c = 126300
     h = 0
 
-    while b != c:
-        if not isprime(b):
+    for i in range(b, c + 1, 17):
+        if not isprime(i):
             h += 1
-        b += 17
-    if not isprime(b):
-        h += 1
 
     return h
 
