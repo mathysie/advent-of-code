@@ -28,6 +28,7 @@ def search_components(pins):
 
 
 def build_bridge(bridges, bridge, last):
+    bridges.append(bridge)
     if bridge[-1][0] == last:
         newlast = bridge[-1][1]
     else:
@@ -36,7 +37,6 @@ def build_bridge(bridges, bridge, last):
 
     options = [option for option in options if option not in bridge]
     for option in options:
-        bridges.append(bridge)
         newbridge = list(bridge)
         newbridge.append(option)
 
@@ -53,8 +53,6 @@ def strongest_bridge():
 
     for option in options:
         build_bridge(bridges, [option], 0)
-    # for bridge in bridges:
-    # 	print(bridge)
 
     strength = 0
     for bridge in bridges:
