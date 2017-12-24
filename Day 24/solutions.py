@@ -1,9 +1,13 @@
 def read_input():
-    components = []
+    components = dict()
     while True:
         try:
             line = input().split("/")
-            components.append([int(line[0]), int(line[1])])
+            component = [int(line[0]), int(line[1])]
+            for i in [0, 1]:
+                if int(line[i]) not in components:
+                    components[int(line[i])] = []
+                components[int(line[i])].append(component)
         except EOFError:
             break
 
@@ -18,15 +22,6 @@ def strength_bridge(bridge):
     return length
 
 
-def search_components(pins):
-    options = []
-    for component in components:
-        if component[0] == pins or component[1] == pins:
-            options.append(component)
-
-    return options
-
-
 def build_bridge(bridges, bridge, last):
     bridges.append(bridge)
     if bridge[-1][0] == last:
@@ -34,8 +29,8 @@ def build_bridge(bridges, bridge, last):
     else:
         newlast = bridge[-1][0]
 
-    options = [option for option in search_components(
-        newlast) if option not in bridge]
+    options = [option for option in components[newlast]
+               if option not in bridge]
     for option in options:
         newbridge = list(bridge)
         newbridge.append(option)
@@ -48,7 +43,7 @@ def build_bridge(bridges, bridge, last):
 
 def build_bridges():
     bridges = []
-    options = search_components(0)
+    options = components[0]
 
     for option in options:
         build_bridge(bridges, [option], 0)
