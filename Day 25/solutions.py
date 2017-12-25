@@ -25,7 +25,7 @@ def read_input():
 def checksum():
     state = "A"
     steps = blueprint["N"]
-    N = 10000
+    N = 11400
     tape = [0 for i in range(0, N)]
     i = int(N / 2)
 
