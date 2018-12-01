@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -34,19 +35,15 @@ int frequency(vector<int> values) {
 int frequency_twice(vector<int> values) {
   int sum = 0;
   unsigned int i = 0;
-  vector<int> freqs;
-  int T = true;
+  set<int> freqs;
 
-  while (T) {
+  while (true) {
     sum += values[i];
-    for (unsigned int j = 0; j < freqs.size(); ++j) {
-      if (freqs[j] == sum) {
-        T = false;
-      }
+    if (freqs.find(sum) != freqs.end()) {
+      break;
     }
-    cout << endl;
-    freqs.push_back(sum);
 
+    freqs.insert(sum);
     i = i == values.size() - 1 ? 0 : i + 1;
   }
 
