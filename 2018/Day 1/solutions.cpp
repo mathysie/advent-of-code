@@ -1,6 +1,6 @@
 #include <fstream>
 #include <iostream>
-#include <set>
+#include <unordered_set>
 #include <string>
 #include <vector>
 
@@ -33,7 +33,7 @@ int frequency(vector<int> values) {
 int frequency_twice(vector<int> values) {
   int sum = 0;
   unsigned int i = 0;
-  set<int> freqs;
+  unordered_set<int> freqs;
 
   while (true) {
     sum += values[i];
