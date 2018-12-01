@@ -6,8 +6,6 @@
 
 using namespace std;
 
-const int N = 995;
-
 vector<int> read_input() {
   string line;
   vector<int> input;
