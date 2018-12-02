@@ -27,12 +27,14 @@ vector<char> compute_id(vector<vector<char>> lines) {
     for (unsigned int j = i + 1; j < lines.size(); j++) {
       int count = 0;
       int index;
+
       for (unsigned int k = 0; k < lines[i].size(); k++) {
         if (lines[i][k] != lines[j][k]) {
           count++;
           index = k;
         }
       }
+
       if (count == 1) {
         vector<char> output = lines[i];
         output.erase(output.begin() + index);
@@ -51,7 +53,7 @@ int main() {
 
   if (!box_id.empty()) {
     for (char c : box_id)
-    cout << c;
+      cout << c;
     cout << endl;
   } else {
     cout << "Geen box_id gevonden.";

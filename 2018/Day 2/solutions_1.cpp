@@ -32,6 +32,7 @@ int main() {
 
   while (getline(file, line)) {
     multiset<char> chars = {};
+
     for (char &c : line) {
       chars.insert(c);
     }
