@@ -33,6 +33,9 @@ vector<char> compute_id(vector<vector<char>> lines) {
           count++;
           index = k;
         }
+        if (count == 2) {
+          continue;
+        }
       }
 
       if (count == 1) {

@@ -41,6 +41,8 @@ int main() {
     dries += tel_dries(chars);
   }
 
+  file.close();
+
   cout << "Checksum " << twees * dries << endl;
 
   return 0;
