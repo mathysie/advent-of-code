@@ -19,7 +19,7 @@ unsigned int reduced_size(string chain) {
   unsigned int counter = 0;
 
   for (unsigned int i = 0; i < chain.size(); i++) {
-    if (counter > 0 && abs(chain[i] - chain[counter - 1]) == 32) {
+    if (counter > 0 && (chain[i] ^ chain[counter - 1]) == 32) {
       counter--;
     } else {
       chain[counter] = chain[i];
