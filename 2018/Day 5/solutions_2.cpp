@@ -1,61 +1,47 @@
 #include <fstream>
 #include <iostream>
-#include <list>
 #include <locale>
+#include <algorithm>
+#include <string>
 
 using namespace std;
 
-list<char> read_input() {
+string read_input() {
   string line;
   ifstream file("input.txt");
-  list<char> input;
 
-  while (getline(file, line)) {
-    for (auto &c : line) {
-      input.push_back(c);
-    }
-  }
+  getline(file, line);
 
-  return input;
+  return line;
 }
 
-void do_reactions(list<char> &chain) {
-  auto it = chain.begin();
-  auto it2 = chain.begin();
-  it2++;
+unsigned int reduced_size(string chain) {
+  unsigned int counter = 0;
 
-  while (it2 != chain.end()) {
-    if (abs(*it - *it2) == 32) {
-      auto it_temp = it;
-      auto it_temp2 = it2;
-
-      if (it == chain.begin()) {
-        advance(it, 2), advance(it2, 2);
-      } else {
-        it2++;
-        it--;
-      }
-      chain.erase(it_temp);
-      chain.erase(it_temp2);
+  for (unsigned int i = 0; i < chain.size(); i++) {
+    if (counter > 0 && abs(chain[i] - chain[counter - 1]) == 32) {
+      counter--;
     } else {
-      it++;
-      it2++;
+      chain[counter] = chain[i];
+      counter++;
     }
   }
+
+  return counter;
 }
 
-int min_length(list<char> input) {
+int min_length(string input) {
   unsigned int min = -1;
 
   for (char c = 'a'; c <= 'z'; c++) {
-    list<char> copy = input;
-    copy.remove(c);
-    copy.remove((char)toupper(c));
+    string copy = input;
+    copy.erase(remove(copy.begin(), copy.end(), c), copy.end());
+    copy.erase(remove(copy.begin(), copy.end(), (char)toupper(c)), copy.end());
 
-    do_reactions(copy);
+    unsigned int len = reduced_size(copy);
 
-    if (copy.size() < min) {
-      min = copy.size();
+    if (len < min) {
+      min = len;
     }
   }
 
@@ -63,9 +49,10 @@ int min_length(list<char> input) {
 }
 
 int main() {
-  list<char> input = read_input();
+  string input = read_input();
+  int min = min_length(input);
 
-  cout << min_length(input) << endl;
+  cout << min << endl;
 
   return 0;
 }
