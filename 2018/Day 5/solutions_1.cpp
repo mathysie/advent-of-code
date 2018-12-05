@@ -18,23 +18,24 @@ list<char> read_input() {
   return input;
 }
 
-void do_reactions(list<char> &input) {
-  auto it = input.begin();
-  auto it2 = input.begin();
+void do_reactions(list<char> &chain) {
+  auto it = chain.begin();
+  auto it2 = chain.begin();
   it2++;
 
-  while (true) {
-    if (it2 == input.end())
-      return;
-
+  while (it2 != chain.end()) {
     if (abs(*it - *it2) == 32) {
       auto it_temp = it;
       auto it_temp2 = it2;
 
-      it2++;
-      it--;
-      input.erase(it_temp);
-      input.erase(it_temp2);
+      if (it == chain.begin()) {
+        advance(it, 2), advance(it2, 2);
+      } else {
+        it2++;
+        it--;
+      }
+      chain.erase(it_temp);
+      chain.erase(it_temp2);
     } else {
       it++;
       it2++;

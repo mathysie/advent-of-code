@@ -24,16 +24,13 @@ void do_reactions(list<char> &chain) {
   auto it2 = chain.begin();
   it2++;
 
-  while (true) {
-    if (it2 == chain.end())
-      return;
-
+  while (it2 != chain.end()) {
     if (abs(*it - *it2) == 32) {
       auto it_temp = it;
       auto it_temp2 = it2;
 
       if (it == chain.begin()) {
-        it++, it++, it2++, it2++;
+        advance(it, 2), advance(it2, 2);
       } else {
         it2++;
         it--;
