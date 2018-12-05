@@ -1,2 +1,2 @@
 all:
-	g++ -Wall -Wextra -o solutions solutions.cpp
+	g++ -O3 -Wall -Wextra -o solutions solutions.cpp
