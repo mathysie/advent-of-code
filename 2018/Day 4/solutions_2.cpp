@@ -1,47 +1,47 @@
+#include <forward_list>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <regex>
-#include <set>
+#include <string>
 
 using namespace std;
 
-set<string> read_input() {
-  set<string> input;
+forward_list<string> read_input() {
+  forward_list<string> input;
   ifstream file("input.txt");
   string line;
 
   while (getline(file, line)) {
-    input.insert(line);
+    input.push_front(line);
   }
+
+  input.sort();
 
   return input;
 }
 
-map<int, vector<int>> fill_timetable(set<string> input) {
-  map<int, vector<int>> guards;
+map<int, array<int, 60>> fill_timetable(const forward_list<string> &input) {
+  map<int, array<int, 60>> guards;
   int guard;
-  regex pattern_begin("Guard #([0-9]+)");
-  regex pattern_sleep("([0-9]{2})] falls asleep");
-  regex pattern_wake("([0-9]{2})] wakes up");
+  int begin;
+  regex pattern("Guard #([0-9]+)|([0-9]{2})] falls|([0-9]{2})] wakes");
   cmatch m;
 
-  for (set<string>::iterator it = input.begin(); it != input.end(); it++) {
-    if (regex_search((*it).c_str(), m, pattern_begin)) {
-      guard = stoi(m.str(1));
-    } else {
-      int begin, eind;
+  for (auto it = input.begin(); it != input.end(); it++) {
+    regex_search(it->c_str(), m, pattern);
 
-      regex_search((*it).c_str(), m, pattern_sleep);
-      begin = stoi(m.str(1));
-      it++;
-      regex_search((*it).c_str(), m, pattern_wake);
-      eind = stoi(m.str(1));
+    if (it->find("Guard") != string::npos) {
+      guard = stoi(m.str(1));
+    } else if (it->find("falls") != string::npos) {
+      begin = stoi(m.str(2));
+    } else if (it->find("wakes") != string::npos) {
+      int eind = stoi(m.str(3));
 
       if (guards.find(guard) == guards.end()) {
-        vector<int> minutes(60);
-        fill(minutes.begin(), minutes.end(), 0);
-        guards.insert(pair<int, vector<int>>(guard, minutes));
+        array<int, 60> minutes;
+        minutes.fill(0);
+        guards.insert(pair<int, array<int, 60>>(guard, minutes));
       }
 
       for (int i = begin; i < eind; i++)
@@ -52,14 +52,15 @@ map<int, vector<int>> fill_timetable(set<string> input) {
   return guards;
 }
 
-int laziest_guard_id(set<string> input) {
-  map<int, vector<int>> guards = fill_timetable(input);
+int laziest_guard_id(const forward_list<string> &input) {
+  map<int, array<int, 60>> guards = fill_timetable(input);
   int laziest_id;
   int laziest_minutes = 0;
   int laziest_minute;
 
-  for (map<int, vector<int>>::iterator it = guards.begin(); it != guards.end();
-       it++) {
+  // Finding max of array withing map of arrays with max_element is difficult,
+  // thus we'll just iterate over every pair.
+  for (auto it = guards.begin(); it != guards.end(); it++) {
     for (int i = 0; i < 60; i++) {
       if (it->second[i] > laziest_minutes) {
         laziest_id = it->first;
@@ -73,7 +74,7 @@ int laziest_guard_id(set<string> input) {
 }
 
 int main() {
-  set<string> input = read_input();
+  forward_list<string> input = read_input();
   int guard_id = laziest_guard_id(input);
 
   cout << guard_id << endl;
