@@ -1,7 +1,7 @@
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <locale>
-#include <algorithm>
 #include <string>
 
 using namespace std;
@@ -35,8 +35,11 @@ int min_length(string input) {
 
   for (char c = 'a'; c <= 'z'; c++) {
     string copy = input;
-    copy.erase(remove(copy.begin(), copy.end(), c), copy.end());
-    copy.erase(remove(copy.begin(), copy.end(), (char)toupper(c)), copy.end());
+    copy.erase(remove_if(copy.begin(), copy.end(),
+                         [c](unsigned char x) {
+                           return x == c || (char)tolower(x) == c;
+                         }),
+               copy.end());
 
     unsigned int len = reduced_size(copy);
 
