@@ -8,6 +8,15 @@
 
 using namespace std;
 
+int sum(unordered_map<char, unordered_set<char>> map) {
+  int counter = 0;
+  for (auto pair : map) {
+    counter += pair.second.size();
+  }
+
+  return counter;
+}
+
 unordered_map<char, unordered_set<char>> read_input() {
   unordered_map<char, unordered_set<char>> input;
   string line;
@@ -28,7 +37,7 @@ unordered_map<char, unordered_set<char>> read_input() {
   }
 
   unordered_map<char, unordered_set<char>> copy = {};
-  while (copy.size() != input.size()) {
+  while (sum(copy) != sum(input)) {
     copy = input;
     for (auto pair : input) {
       for (auto c : pair.second) {
