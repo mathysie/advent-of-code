@@ -62,7 +62,7 @@ void compute_sum(node *current, int &sum) {
     compute_sum(child, sum);
   }
 
-  delete current;  
+  delete current;
 }
 
 int main() {
