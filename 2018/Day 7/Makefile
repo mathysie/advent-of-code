@@ -1,3 +1,5 @@
-all:
-	g++ -Wall -Wextra -o solutions_1 solutions_1.cpp
-	g++ -Wall -Wextra -o solutions_2 solutions_2.cpp
+SOURCES=$(wildcard *.cpp)
+TARGETS=$(SOURCES:.cpp=)
+CXXFLAGS=-Wall -Wextra -g
+
+all: $(TARGETS)
