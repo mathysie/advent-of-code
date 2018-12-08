@@ -7,14 +7,6 @@
 
 using namespace std;
 
-struct node {
-  int childs;
-  int metadatas;
-  int sum = 0;
-  vector<node *> child_nodes = {};
-  node *parent;
-};
-
 vector<int> read_input() {
   ifstream file("input.txt");
   string line;
@@ -31,45 +23,32 @@ vector<int> read_input() {
   return tokens;
 }
 
-void create_node(node *current, vector<int> input, int &i) {
-  current->childs = input[i], i++;
-  current->metadatas = input[i], i++;
-  for (int j = 0; j < current->childs; j++) {
-    node *child = new node;
-    child->parent = current;
-    current->child_nodes.push_back(child);
-    create_node(child, input, i);
+void add_sum(vector<int> input, int &i, int &sum) {
+  int childs = input[i];
+  i++;
+  int metadatas = input[i];
+  i++;
+
+  for (int j = 0; j < childs; j++) {
+    add_sum(input, i, sum);
   }
-  for (int j = 0; j < current->metadatas; j++) {
-    current->sum += input[i];
+
+  for (int j = 0; j < metadatas; j++) {
+    sum += input[i];
     i++;
   }
 }
 
-node *build_tree(vector<int> input) {
-  node *start = new node;
-  start->parent = NULL;
+void compute_sum(vector<int> input, int &sum) {
   int i = 0;
 
-  create_node(start, input, i);
-
-  return start;
-}
-
-void compute_sum(node *current, int &sum) {
-  sum += current->sum;
-  for (auto child : current->child_nodes) {
-    compute_sum(child, sum);
-  }
-
-  delete current;
+  add_sum(input, i, sum);
 }
 
 int main() {
   vector<int> input = read_input();
-  node *start = build_tree(input);
   int sum = 0;
-  compute_sum(start, sum);
+  compute_sum(input, sum);
   cout << sum << endl;
 
   return 0;
