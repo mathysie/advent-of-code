@@ -58,9 +58,11 @@ node *build_tree(vector<int> input) {
 
 void compute_sum(node *current, int &sum) {
   sum += current->sum;
-  for (unsigned int i = 0; i < current->child_nodes.size(); i++) {
-    compute_sum(current->child_nodes[i], sum);
+  for (auto child : current->child_nodes) {
+    compute_sum(child, sum);
   }
+
+  delete current;  
 }
 
 int main() {
