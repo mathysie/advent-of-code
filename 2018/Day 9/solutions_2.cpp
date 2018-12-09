@@ -71,15 +71,14 @@ int winning_score(int players, int max_points) {
   marble *current = create_starting_marble();
 
   for (int i = 1; i <= max_points * 100; i++) {
-    current = current->next->next;
-
     if (i % 23 != 0) {
+      current = current->next->next;
       current = insert_marble(current, i);
     } else {
       int player = (i - 1) % players;
       scores[player] += i;
 
-      for (int j = 0; j < 9; j++) {
+      for (int j = 0; j < 7; j++) {
         current = current->prev;
       }
       scores[player] += current->value;
