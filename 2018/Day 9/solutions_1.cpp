@@ -65,7 +65,7 @@ void delete_marbles(marble *current) {
 }
 
 int winning_score(int players, int max_points) {
-  vector<int> scores(players);
+  vector<unsigned int> scores(players);
   fill(scores.begin(), scores.end(), 0);
 
   marble *current = create_starting_marble();
@@ -77,10 +77,12 @@ int winning_score(int players, int max_points) {
     } else {
       int player = (i - 1) % players;
       scores[player] += i;
+
       for (int j = 0; j < 9; j++) {
         current = current->prev;
       }
       scores[player] += current->value;
+
       current = remove_marble(current);
     }
   }
@@ -92,7 +94,7 @@ int winning_score(int players, int max_points) {
 
 int main() {
   int *input = read_input();
-  int score = winning_score(input[0], input[1]);
+  unsigned int score = winning_score(input[0], input[1]);
 
   cout << score << endl;
 
