@@ -19,9 +19,9 @@ int *read_input() {
   return input;
 }
 
-int winning_score(int players, int max_points) {
-  vector<unsigned int> scores(players);
-  fill(scores.begin(), scores.end(), 0);
+long winning_score(int players, int max_points) {
+  vector<long> scores(players);
+  fill(scores.begin(), scores.end(), 0L);
 
   list<int> marbles(1, 0);
   auto it = marbles.begin();
@@ -56,7 +56,7 @@ int winning_score(int players, int max_points) {
 
 int main() {
   int *input = read_input();
-  unsigned int score = winning_score(input[0], input[1]);
+  long score = winning_score(input[0], input[1]);
 
   cout << score << endl;
 
