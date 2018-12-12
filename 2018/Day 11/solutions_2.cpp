@@ -7,11 +7,10 @@ using namespace std;
 
 int read_input() {
   ifstream file("input.txt");
-  string line;
+  int x;
+  file >> x;
 
-  getline(file, line);
-
-  return stoi(line);
+  return x;
 }
 
 int power_cell(int x, int y, int serial) {
@@ -23,19 +22,16 @@ array<array<int, 300>, 300> build_grid(int serial) {
   for (int y = 0; y < 300; y++) {
     array<int, 300> line;
     for (int x = 0; x < 300; x++) {
-      if (y == 0) {
-        if (x == 0) {
-          line[x] = power_cell(x + 1, y + 1, serial);
-        } else {
-          line[x] = line[x - 1] + power_cell(x + 1, y + 1, serial);
-        }
-      } else {
-        if (x == 0) {
-          line[x] = grid[y - 1][x] + power_cell(x + 1, y + 1, serial);
-        } else {
-          line[x] = grid[y - 1][x] + line[x - 1] - grid[y - 1][x - 1] +
-                    power_cell(x + 1, y + 1, serial);
-        }
+      line[x] = power_cell(x + 1, y + 1, serial);
+
+      if (y != 0) {
+        line[x] += grid[y - 1][x];
+      }
+      if (x != 0) {
+        line[x] += line[x - 1];
+      }
+      if (x != 0 && y != 0) {
+        line[x] -= grid[y - 1][x - 1];
       }
     }
     grid[y] = line;
@@ -53,17 +49,16 @@ void largest_square(const array<array<int, 300>, 300> &grid) {
   for (int size = 1; size <= 300; size++) {
     for (int x = 1; x <= 300 - size + 1; x++) {
       for (int y = 1; y <= 300 - size + 1; y++) {
-        int power;
+        int power = grid[y - 2 + size][x - 2 + size];
 
-        if (x == 1 && y == 1) {
-          power = grid[0][0];
-        } else if (x == 1) {
-          power = grid[y - 2 + size][x - 2 + size] - grid[y - 2][x - 2 + size];
-        } else if (y == 1) {
-          power = grid[y - 2 + size][x - 2 + size] - grid[y - 2 + size][x - 2];
-        } else {
-          power = grid[y - 2 + size][x - 2 + size] - grid[y - 2 + size][x - 2] -
-                  grid[y - 2][x - 2 + size] + grid[y - 2][x - 2];
+        if (x != 1) {
+          power -= grid[y - 2 + size][x - 2];
+        }
+        if (y != 1) {
+          power -= grid[y - 2][x - 2 + size];
+        }
+        if (x != 1 && y != 1) {
+          power += grid[y - 2][x - 2];
         }
 
         if (power > max_power) {
