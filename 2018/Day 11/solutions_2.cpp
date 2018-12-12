@@ -15,11 +15,7 @@ int read_input() {
 }
 
 int power_cell(int x, int y, int serial) {
-  double power = ((x + 10) * y + serial) * (x + 10) % 1000;
-  modf(power / 100, &power);
-  power -= 5;
-
-  return (int)power;
+  return ((x + 10) * y + serial) * (x + 10) % 1000 / 100 - 5;
 }
 
 array<array<int, 300>, 300> build_grid(int serial) {
@@ -27,7 +23,20 @@ array<array<int, 300>, 300> build_grid(int serial) {
   for (int y = 0; y < 300; y++) {
     array<int, 300> line;
     for (int x = 0; x < 300; x++) {
-      line[x] = power_cell(x + 1, y + 1, serial);
+      if (y == 0) {
+        if (x == 0) {
+          line[x] = power_cell(x + 1, y + 1, serial);
+        } else {
+          line[x] = line[x - 1] + power_cell(x + 1, y + 1, serial);
+        }
+      } else {
+        if (x == 0) {
+          line[x] = grid[y - 1][x] + power_cell(x + 1, y + 1, serial);
+        } else {
+          line[x] = grid[y - 1][x] + line[x - 1] - grid[y - 1][x - 1] +
+                    power_cell(x + 1, y + 1, serial);
+        }
+      }
     }
     grid[y] = line;
   }
@@ -44,12 +53,17 @@ void largest_square(const array<array<int, 300>, 300> &grid) {
   for (int size = 1; size <= 300; size++) {
     for (int x = 1; x <= 300 - size + 1; x++) {
       for (int y = 1; y <= 300 - size + 1; y++) {
-        int power = 0;
+        int power;
 
-        for (int i = 0; i < size; i++) {
-          for (int j = 0; j < size; j++) {
-            power += grid[y - 1 + j][x - 1 + i];
-          }
+        if (x == 1 && y == 1) {
+          power = grid[0][0];
+        } else if (x == 1) {
+          power = grid[y - 2 + size][x - 2 + size] - grid[y - 2][x - 2 + size];
+        } else if (y == 1) {
+          power = grid[y - 2 + size][x - 2 + size] - grid[y - 2 + size][x - 2];
+        } else {
+          power = grid[y - 2 + size][x - 2 + size] - grid[y - 2 + size][x - 2] -
+                  grid[y - 2][x - 2 + size] + grid[y - 2][x - 2];
         }
 
         if (power > max_power) {
