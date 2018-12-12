@@ -87,7 +87,7 @@ void largest_square(const array<array<int, 300>, 300> &grid) {
   int max_power = 0;
 
   for (int size = 1; size <= 300; size++) {
-    int* res = best_square(grid, size);;
+    int* res = best_square(grid, size);
     if (res[0] > max_power) {
       update_max_power(max_power, res[0], max_x, res[1], max_y, res[2]);
       max_size = size;

@@ -19,58 +19,71 @@ int power_cell(int x, int y, int serial) {
 
 array<array<int, 300>, 300> build_grid(int serial) {
   array<array<int, 300>, 300> grid;
+  grid[0][0] = power_cell(1, 1, serial);
 
-  for (int y = 0; y < 300; y++) {
-    array<int, 300> line;
+  for (int x = 1; x < 300; x++) {
+    grid[0][x] = power_cell(x + 1, 1, serial) + grid[0][x - 1];
+  }
 
-    for (int x = 0; x < 300; x++) {
-      line[x] = power_cell(x + 1, y + 1, serial);
+  for (int y = 1; y < 300; y++) {
+    grid[y][0] = power_cell(1, y + 1, serial) + grid[y - 1][0];
 
-      if (y != 0) {
-        line[x] += grid[y - 1][x];
-      }
-      if (x != 0) {
-        line[x] += line[x - 1];
-      }
-      if (x != 0 && y != 0) {
-        line[x] -= grid[y - 1][x - 1];
-      }
+    for (int x = 1; x < 300; x++) {
+      grid[y][x] = power_cell(x + 1, y + 1, serial) + grid[y - 1][x] +
+                   grid[y][x - 1] - grid[y - 1][x - 1];
     }
-
-    grid[y] = line;
   }
 
   return grid;
 }
 
-void largest_square(const array<array<int, 300>, 300> &grid) {
-  int max_power = 0;
-  int max_x;
-  int max_y;
+void update_max_power(int &max_power, int power, int &max_x, int x,
+                      int &max_y, int y) {
+  max_power = power;
+  max_x = x;
+  max_y = y;
+}
 
-  for (int x = 1; x <= 298; x++) {
-    for (int y = 1; y <= 298; y++) {
-      int power = grid[y + 1][x + 1];
+int *best_square(const array<array<int, 300>, 300> &grid, int size) {
+  int max_power = grid[size - 1][size - 1];
+  int max_x = 1;
+  int max_y = 1;
 
-      if (x != 1) {
-        power -= grid[y + 1][x - 2];
-      }
-      if (y != 1) {
-        power -= grid[y - 2][x + 1];
-      }
-      if (x != 1 && y != 1) {
-        power += grid[y - 2][x - 2];
-      }
+  for (int x = 2; x <= 300 - size + 1; x++) {
+    int power = grid[size - 1][x - 2 + size] - grid[size - 1][x - 2];
+    if (power > max_power) {
+      update_max_power(max_power, power, max_x, x, max_y, 1);
+    }
+  }
+
+  for (int y = 2; y <= 300 - size + 1; y++) {
+    int power = grid[y - 2 + size][size - 1] - grid[y - 2][size - 1];
+    if (power > max_power) {
+      update_max_power(max_power, power, max_x, 1, max_y, y);
+    }
+  }
+
+  for (int x = 2; x <= 300 - size + 1; x++) {
+    for (int y = 2; y <= 300 - size + 1; y++) {
+      int power = grid[y - 2 + size][x - 2 + size] - grid[y - 2 + size][x - 2] -
+                  grid[y - 2][x - 2 + size] + grid[y - 2][x - 2];
 
       if (power > max_power) {
-        max_power = power;
-        max_x = x;
-        max_y = y;
+        update_max_power(max_power, power, max_x, x, max_y, y);
       }
     }
   }
 
-  cout << max_x << "," << max_y << endl;
+  static int res[3];
+  res[0] = max_power, res[1] = max_x, res[2] = max_y;
+
+  return res;
+}
+
+void largest_square(const array<array<int, 300>, 300> &grid) {
+  int* res = best_square(grid, 3);
+
+  cout << res[1] << "," << res[2] << endl;
 }
 
 int main() {
