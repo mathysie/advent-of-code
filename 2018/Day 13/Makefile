@@ -1,5 +1,5 @@
 SOURCES=$(wildcard *.cpp)
 TARGETS=$(SOURCES:.cpp=)
-CXXFLAGS=-Wall -Wextra -g -O3 -Wconversion
+CXXFLAGS=-Wall -Wextra -O3 -g -Wconversion
 
 all: $(TARGETS)
