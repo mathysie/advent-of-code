@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -34,9 +35,7 @@ long seq_index(list<int> recipes, vector<int> seq) {
     return -1;
   }
 
-  auto it = recipes.end();
-  advance(it, -seq.size() - 2);
-  auto pos = search(it, recipes.end(), seq.begin(), seq.end());
+  auto pos = search(recipes.begin(), recipes.end(), seq.begin(), seq.end());
 
   if (pos != recipes.end()) {
     int counter = 0;
@@ -58,7 +57,12 @@ list<int> make_recipes(vector<int> seq) {
   it2++;
 
   int counter = 0;
-  while (seq_index(recipes, seq) == -1) {
+  int amount = 0;
+  for (unsigned int i = 0; i < seq.size(); i++) {
+    amount += seq[i]*(int) pow(10, seq.size() - 1 - i);
+  }
+  amount *=100;
+  for (int i = 0; i < amount; i++) {
     if (counter % 1000 == 0) {
       cout << counter << endl;
     }
