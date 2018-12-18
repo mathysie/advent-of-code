@@ -93,7 +93,7 @@ void run_iteration(vector<char> &area) {
 }
 
 void run_area(vector<char> &area) {
-  for (int i = 0; i < 1000; i++) {
+  for (int i = 0; i < 569; i++) {
     run_iteration(area);
   }
   vector<char> copy = area;
@@ -104,7 +104,7 @@ void run_area(vector<char> &area) {
     k++;
   } while (area != copy);
 
-  for (int i = 0; i < ((1000000000-1000) % k); i++) {
+  for (int i = 0; i < ((1000000000 - 569) % k); i++) {
     run_iteration(area);
   };
 }
