@@ -15,8 +15,8 @@ unordered_map<char, unordered_set<char>> read_input() {
   while (getline(file, line)) {
     char x;
     char y;
-    sscanf(line.c_str(), "Step %s must be finished before step %s can begin.",
-           &x, &y);
+    sscanf(line.c_str(), "Step %s must be finished before step %s can begin.", &x, &y);
+
     if (input.find(y) == input.end()) {
       unordered_set<char> z;
       z.insert(x);
@@ -24,6 +24,7 @@ unordered_map<char, unordered_set<char>> read_input() {
     } else {
       input[y].insert(x);
     }
+
     if (input.find(x) == input.end()) {
       input.insert(make_pair(x, unordered_set<char>{}));
     }
@@ -32,8 +33,8 @@ unordered_map<char, unordered_set<char>> read_input() {
   return input;
 }
 
-bool workers_busy(pair<char, int>* workers) {
-  for (unsigned int i = 0; i < sizeof(workers)/sizeof(pair<char, int>); i++) {
+bool workers_busy(vector<pair<char, int>> workers) {
+  for (unsigned int i = 0; i < workers.size(); i++) {
     if (workers[i].first != '.') {
       return true;
     }
@@ -45,11 +46,13 @@ bool workers_busy(pair<char, int>* workers) {
 int work_time(unordered_map<char, unordered_set<char>> depends) {
   set<char> free;
   int N = 5;
-  pair<char, int> workers[N] = {
-      {'.', 0}, {'.', 0}, {'.', 0}, {'.', 0}, {'.', 0}};
-  int time = 0;
+  vector<pair<char, int>> workers = {{'.', 0}, {'.', 0}, {'.', 0}, {'.', 0}, {'.', 0}};
+  int time = -1;
 
   do {
+    time++;
+
+    // Geef werknemers vrij als hun taak af is.
     for (int i = 0; i < N; i++) {
       if (workers[i].second + 1 <= time) {
         for (auto pair : depends) {
@@ -74,29 +77,20 @@ int work_time(unordered_map<char, unordered_set<char>> depends) {
       }
     }
 
+    // Geef werknemers die niets doen werk.
     if (free.size() != 0) {
       auto it_free = free.begin();
-      for (int i = 0; i < N; i++) {
-        if (workers[i].first == '.' && it_free != free.end()) {
+      for (int i = 0; i < N && it_free != free.end(); i++) {
+        if (workers[i].first == '.') {
           workers[i].first = *(it_free);
           workers[i].second = *(it_free) + 60 - 'A' + time;
-          auto it = it_free;
-          it_free++;
-          free.erase(it);
+          it_free = free.erase(it_free);
         }
       }
     }
-
-    cout << time << " ";
-    for (auto pair: workers) {
-      cout << pair.first << " " << pair.second << ", ";
-    }
-    cout << endl;
-
-    time++;
   } while (workers_busy(workers));
 
-  return time - 2;
+  return time;
 }
 
 int main() {
