@@ -7,10 +7,9 @@
 using namespace std;
 
 array<int, 4> addr(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] + reg[op[2]];
+  reg[op[3]] = reg[op[1]] + reg[op[2]];
 
-  return temp;
+  return reg;
 }
 
 bool is_addr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -18,10 +17,9 @@ bool is_addr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> addi(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] + op[2];
+  reg[op[3]] = reg[op[1]] + op[2];
 
-  return temp;
+  return reg;
 }
 
 bool is_addi(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -29,10 +27,9 @@ bool is_addi(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> mulr(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] * reg[op[2]];
+  reg[op[3]] = reg[op[1]] * reg[op[2]];
 
-  return temp;
+  return reg;
 }
 
 bool is_mulr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -40,10 +37,9 @@ bool is_mulr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> muli(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] * op[2];
+  reg[op[3]] = reg[op[1]] * op[2];
 
-  return temp;
+  return reg;
 }
 
 bool is_muli(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -51,10 +47,9 @@ bool is_muli(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> banr(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] & reg[op[2]];
+  reg[op[3]] = reg[op[1]] & reg[op[2]];
 
-  return temp;
+  return reg;
 }
 
 bool is_banr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -62,10 +57,9 @@ bool is_banr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> bani(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] & op[2];
+  reg[op[3]] = reg[op[1]] & op[2];
 
-  return temp;
+  return reg;
 }
 
 bool is_bani(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -73,10 +67,9 @@ bool is_bani(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> borr(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] | reg[op[2]];
+  reg[op[3]] = reg[op[1]] | reg[op[2]];
 
-  return temp;
+  return reg;
 }
 
 bool is_borr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -84,10 +77,9 @@ bool is_borr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> bori(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] | op[2];
+  reg[op[3]] = reg[op[1]] | op[2];
 
-  return temp;
+  return reg;
 }
 
 bool is_bori(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -95,10 +87,9 @@ bool is_bori(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> setr(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]];
+  reg[op[3]] = reg[op[1]];
 
-  return temp;
+  return reg;
 }
 
 bool is_setr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -106,10 +97,9 @@ bool is_setr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> seti(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = op[1];
+  reg[op[3]] = op[1];
 
-  return temp;
+  return reg;
 }
 
 bool is_seti(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -117,10 +107,9 @@ bool is_seti(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> gtir(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = op[1] > reg[op[2]];
+  reg[op[3]] = op[1] > reg[op[2]];
 
-  return temp;
+  return reg;
 }
 
 bool is_gtir(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -128,10 +117,9 @@ bool is_gtir(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> gtri(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] > op[2];
+  reg[op[3]] = reg[op[1]] > op[2];
 
-  return temp;
+  return reg;
 }
 
 bool is_gtri(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -139,10 +127,9 @@ bool is_gtri(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> gtrr(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] > reg[op[2]];
+  reg[op[3]] = reg[op[1]] > reg[op[2]];
 
-  return temp;
+  return reg;
 }
 
 bool is_gtrr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -150,10 +137,9 @@ bool is_gtrr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> eqir(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = op[1] == reg[op[2]];
+  reg[op[3]] = op[1] == reg[op[2]];
 
-  return temp;
+  return reg;
 }
 
 bool is_eqir(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -161,10 +147,9 @@ bool is_eqir(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> eqri(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] == op[2];
+  reg[op[3]] = reg[op[1]] == op[2];
 
-  return temp;
+  return reg;
 }
 
 bool is_eqri(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -172,10 +157,9 @@ bool is_eqri(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 array<int, 4> eqrr(array<int, 4> reg, array<int, 4> op) {
-  array<int, 4> temp = reg;
-  temp[op[3]] = reg[op[1]] == reg[op[2]];
+  reg[op[3]] = reg[op[1]] == reg[op[2]];
 
-  return temp;
+  return reg;
 }
 
 bool is_eqrr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
@@ -183,71 +167,83 @@ bool is_eqrr(array<int, 4> reg, array<int, 4> op, array<int, 4> res) {
 }
 
 void detect_programs(array<int, 4> reg, array<int, 4> op, array<int, 4> res,
-                     array<vector<int>, 16> &candidates) {
+                     vector<vector<int>> &candidates, array<int, 16> &opcodes) {
   vector<int> temp = candidates[op[0]];
   vector<int> pos;
 
-  if (is_addi(reg, op, res)) {
+  if (is_addr(reg, op, res)) {
     pos.push_back(1);
   }
-  if (is_mulr(reg, op, res)) {
+  if (is_addi(reg, op, res)) {
     pos.push_back(2);
   }
-  if (is_muli(reg, op, res)) {
+  if (is_mulr(reg, op, res)) {
     pos.push_back(3);
   }
-  if (is_banr(reg, op, res)) {
+  if (is_muli(reg, op, res)) {
     pos.push_back(4);
   }
-  if (is_bani(reg, op, res)) {
+  if (is_banr(reg, op, res)) {
     pos.push_back(5);
   }
-  if (is_borr(reg, op, res)) {
+  if (is_bani(reg, op, res)) {
     pos.push_back(6);
   }
-  if (is_bori(reg, op, res)) {
+  if (is_borr(reg, op, res)) {
     pos.push_back(7);
   }
-  if (is_setr(reg, op, res)) {
+  if (is_bori(reg, op, res)) {
     pos.push_back(8);
   }
-  if (is_seti(reg, op, res)) {
+  if (is_setr(reg, op, res)) {
     pos.push_back(9);
   }
-  if (is_gtir(reg, op, res)) {
+  if (is_seti(reg, op, res)) {
     pos.push_back(10);
   }
-  if (is_gtri(reg, op, res)) {
+  if (is_gtir(reg, op, res)) {
     pos.push_back(11);
   }
-  if (is_gtrr(reg, op, res)) {
+  if (is_gtri(reg, op, res)) {
     pos.push_back(12);
   }
-  if (is_eqir(reg, op, res)) {
+  if (is_gtrr(reg, op, res)) {
     pos.push_back(13);
   }
-  if (is_eqri(reg, op, res)) {
+  if (is_eqir(reg, op, res)) {
     pos.push_back(14);
   }
-  if (is_eqrr(reg, op, res)) {
+  if (is_eqri(reg, op, res)) {
     pos.push_back(15);
   }
-  if (is_addr(reg, op, res)) {
+  if (is_eqrr(reg, op, res)) {
     pos.push_back(16);
   }
 
   vector<int> temp2(16);
 
-  set_intersection(temp.begin(), temp.end(), pos.begin(), pos.end(), temp2.begin());
+  set_intersection(temp.begin(), temp.end(), pos.begin(), pos.end(),
+                   temp2.begin());
   temp2.resize(distance(temp2.begin(), find(temp2.begin(), temp2.end(), 0)));
+
+  if (temp2.size() == 1) {
+    opcodes[op[0]] = temp2[0];
+    for (unsigned int i = 0; i < candidates.size(); i++) {
+      candidates[i].erase(
+          remove(candidates[i].begin(), candidates[i].end(), temp2[0]),
+          candidates[i].end());
+    }
+  }
+
   candidates[op[0]] = temp2;
 }
 
 void fill_opcodes(array<int, 16> &opcodes) {
   fstream file("input.txt");
   string line;
-  array<vector<int>, 16> candidates;
-  candidates.fill(vector<int> {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15, 16});
+  vector<vector<int>> candidates(16);
+  fill(candidates.begin(), candidates.end(),
+       vector<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
 
   while (getline(file, line)) {
     array<int, 4> reg;
@@ -265,66 +261,63 @@ void fill_opcodes(array<int, 16> &opcodes) {
 
     getline(file, line);
 
-    detect_programs(reg, op, res, candidates);
-  }
-
-  for (int i = 0; i < 16; i++) {
-    opcodes[i] = candidates[i][0];
+    detect_programs(reg, op, res, candidates, opcodes);
   }
 
   file.close();
 }
 
-void run_instruction(array<int, 4> & reg, array<int, 4> op, array<int, 16> opcodes) {
+void run_instruction(array<int, 4> &reg, array<int, 4> op,
+                     array<int, 16> opcodes) {
   switch (opcodes[op[0]]) {
-    case 1:
-      reg = addi(reg, op);
-      break;
-    case 2:
-      reg = mulr(reg, op);
-      break;
-    case 3:
-      reg = muli(reg, op);
-      break;
-    case 4:
-      reg = banr(reg, op);
-      break;
-    case 5:
-      reg = bani(reg, op);
-      break;
-    case 6:
-      reg = borr(reg, op);
-      break;
-    case 7:
-      reg = bori(reg, op);
-      break;
-    case 8:
-      reg = setr(reg, op);
-      break;
-    case 9:
-      reg = seti(reg, op);
-      break;
-    case 10:
-      reg = gtir(reg, op);
-      break;
-    case 11:
-      reg = gtri(reg, op);
-      break;
-    case 12:
-      reg = gtrr(reg, op);
-      break;
-    case 13:
-      reg = eqir(reg, op);
-      break;
-    case 14:
-      reg = eqri(reg, op);
-      break;
-    case 15:
-      reg = eqrr(reg, op);
-      break;
-    case 16:
-      reg = addr(reg, op); 
-      break;
+  case 1:
+    reg = addr(reg, op);
+    break;
+  case 2:
+    reg = addi(reg, op);
+    break;
+  case 3:
+    reg = mulr(reg, op);
+    break;
+  case 4:
+    reg = muli(reg, op);
+    break;
+  case 5:
+    reg = banr(reg, op);
+    break;
+  case 6:
+    reg = bani(reg, op);
+    break;
+  case 7:
+    reg = borr(reg, op);
+    break;
+  case 8:
+    reg = bori(reg, op);
+    break;
+  case 9:
+    reg = setr(reg, op);
+    break;
+  case 10:
+    reg = seti(reg, op);
+    break;
+  case 11:
+    reg = gtir(reg, op);
+    break;
+  case 12:
+    reg = gtri(reg, op);
+    break;
+  case 13:
+    reg = gtrr(reg, op);
+    break;
+  case 14:
+    reg = eqir(reg, op);
+    break;
+  case 15:
+    reg = eqri(reg, op);
+    break;
+  case 16:
+    reg = eqrr(reg, op);
+    break;
   }
 }
 
@@ -349,14 +342,7 @@ int main() {
   opcodes.fill(-1);
   fill_opcodes(opcodes);
 
-  for (auto code: opcodes) {
-    cout << code << " ";
-  }
-  cout << endl;
-
-  int x = run_program(opcodes);
-
-  cout << x << endl;
+  cout << run_program(opcodes) << endl;
 
   return 0;
 }
