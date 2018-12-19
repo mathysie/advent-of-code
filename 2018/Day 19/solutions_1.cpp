@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <sstream>
 #include <vector>
 
 using namespace std;
@@ -26,44 +27,44 @@ enum opcode {
   fout
 };
 
-opcode parse(string s) {
-  if (s == "addr")
+opcode parse(char *s) {
+  if (strcmp(s, "addr") == 0)
     return addr;
-  if (s == "addi")
+  if (strcmp(s, "addi") == 0)
     return addi;
-  if (s == "mulr")
+  if (strcmp(s, "mulr") == 0)
     return mulr;
-  if (s == "muli")
+  if (strcmp(s, "muli") == 0)
     return muli;
-  if (s == "banr")
+  if (strcmp(s, "banr") == 0)
     return banr;
-  if (s == "bani")
+  if (strcmp(s, "bani") == 0)
     return bani;
-  if (s == "borr")
+  if (strcmp(s, "borr") == 0)
     return borr;
-  if (s == "bori")
+  if (strcmp(s, "bori") == 0)
     return bori;
-  if (s == "setr")
+  if (strcmp(s, "setr") == 0)
     return setr;
-  if (s == "seti")
+  if (strcmp(s, "seti") == 0)
     return seti;
-  if (s == "gtir")
+  if (strcmp(s, "gtir") == 0)
     return gtir;
-  if (s == "gtri")
+  if (strcmp(s, "gtri") == 0)
     return gtri;
-  if (s == "gtrr")
+  if (strcmp(s, "gtrr") == 0)
     return gtrr;
-  if (s == "eqir")
+  if (strcmp(s, "eqir") == 0)
     return eqir;
-  if (s == "eqri")
+  if (strcmp(s, "eqri") == 0)
     return eqri;
-  if (s == "eqrr")
+  if (strcmp(s, "eqrr") == 0)
     return eqrr;
   return fout;
 }
 
-int do_instruction(unsigned int x, vector<array<int, 4>> instr,
-                   array<int, 6> reg) {
+int do_instruction(unsigned int x, const vector<array<int, 4>> &instr,
+                   const array<int, 6> &reg) {
   switch (instr[x][0]) {
   case addr:
     return reg[instr[x][1]] + reg[instr[x][2]];
@@ -116,11 +117,11 @@ vector<array<int, 4>> read_instructions(ifstream &file) {
   vector<array<int, 4>> instr;
 
   while (getline(file, line)) {
-    regex pattern("([a-z]{4}) ([0-9]+) ([0-9]+) ([0-9]+)");
-    cmatch matches;
-    regex_match(line.c_str(), matches, pattern);
-    array<int, 4> rule = {parse(matches[1].str()), stoi(matches[2].str()),
-                          stoi(matches[3].str()), stoi(matches[4].str())};
+    istringstream stream(line);
+    char code[5];
+    int x, y, z;
+    stream >> code >> x >> y >> z;
+    array<int, 4> rule = {parse(code), x, y, z};
     instr.push_back(rule);
   }
 
@@ -129,7 +130,7 @@ vector<array<int, 4>> read_instructions(ifstream &file) {
   return instr;
 }
 
-int run_program(unsigned int ip, vector<array<int, 4>> instr) {
+int run_program(unsigned int ip, const vector<array<int, 4>> &instr) {
   array<int, 6> reg = {0, 0, 0, 0, 0, 0};
   unsigned int x = reg[ip];
 
