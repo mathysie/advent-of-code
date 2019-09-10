@@ -21,8 +21,7 @@ void display_time(const auto &start) {
 void initialize(Field &field, vector<Elf *> &elves, vector<Goblin *> &goblins) {
   ifstream file("input.txt");
   string line;
-  int row = 0;
-  while (getline(file, line)) {
+  for (unsigned int row = 0; getline(file, line); row++) {
     vector<Vak *> rij;
     for (unsigned int col = 0; col < line.size(); col++) {
       Vak *vak = new Vak(line[col]);
@@ -39,7 +38,6 @@ void initialize(Field &field, vector<Elf *> &elves, vector<Goblin *> &goblins) {
     }
 
     field.veld.push_back(rij);
-    row++;
   }
 }
 
@@ -65,10 +63,10 @@ void round(const Field &field, vector<Elf *> &elves,
         continue;
       } else if (field.veld[i][j]->val == 'E') {
         Unit *elf = field.veld[i][j]->unit;
-        elf->turn(goblins);
+        elf->turn(goblins, field);
       } else if (field.veld[i][j]->val == 'G') {
         Unit *goblin = field.veld[i][j]->unit;
-        goblin->turn(elves);
+        goblin->turn(elves, field);
       }
     }
   }

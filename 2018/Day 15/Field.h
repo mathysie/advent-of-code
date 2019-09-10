@@ -7,7 +7,7 @@
 using namespace std;
 
 struct Field {
-  vector<vector<Vak*>> veld;
+  vector<vector<Vak *>> veld;
   void print();
 };
 
