@@ -1,13 +1,13 @@
 #ifndef FIELD_H
 #define FIELD_H
 
-#include <string>
+#include "Vak.h"
 #include <vector>
 
 using namespace std;
 
 struct Field {
-  vector<string> veld;
+  vector<vector<Vak*>> veld;
   void print();
 };
 

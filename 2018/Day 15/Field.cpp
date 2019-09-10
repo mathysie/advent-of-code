@@ -2,9 +2,9 @@
 #include <iostream>
 
 void Field::print() {
-  for (auto v : veld) {
-    for (auto c : v) {
-      cout << c;
+  for (auto rij : veld) {
+    for (auto vak : rij) {
+      cout << vak->val;
     }
     cout << "\n";
   }

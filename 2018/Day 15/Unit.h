@@ -2,16 +2,29 @@
 #define UNIT_H
 
 #include <utility>
+#include <vector>
 
 using namespace std;
 
+class Elf;
+
+class Goblin;
+
 class Unit {
-  int hp;
   int ap;
 
 public:
-  pair<int, int> pos;
-  Unit(int x, int y) : hp(200), ap(3) { pos = make_pair(x, y); };
+  int hp;
+  pair<unsigned int, unsigned int> pos;
+
+  virtual void turn(vector<Elf *> &) =0;
+  virtual void turn(vector<Goblin *> &) =0;
+
+  Unit(unsigned int x, unsigned int y) : ap(3), hp(200) {
+    pos = make_pair(x, y);
+  };
+  virtual ~Unit() {};
+
 };
 
 #endif
