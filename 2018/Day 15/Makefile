@@ -1,5 +1,9 @@
 SOURCES=$(wildcard *.cpp)
-TARGETS=$(SOURCES:.cpp=)
-CXXFLAGS=-Wall -Wextra -g -O3 -Wconversion
+TARGETS=$(SOURCES:.cpp=.o)
+CXXFLAGS=-Wall -Wextra -g -Wconversion
 
 all: $(TARGETS)
+	g++ $(CXXFLAGS) -o solution $(TARGETS)
+
+clean:
+	rm -f core *.o
