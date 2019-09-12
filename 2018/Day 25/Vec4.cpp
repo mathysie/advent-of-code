@@ -9,5 +9,5 @@ int Vec4::dist(const Vec4 &v) {
 }
 
 void Vec4::print() const {
-  cout << x << '\t' << y << '\t' << z << '\t' << w << '\n';
+  cout << x << '\t' << y << '\t' << z << '\t' << w;
 }
