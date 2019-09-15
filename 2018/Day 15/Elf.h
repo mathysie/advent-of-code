@@ -4,6 +4,7 @@
 #include "Field.h"
 #include "Goblin.h"
 #include "Unit.h"
+#include "Vak.h"
 #include <vector>
 
 using namespace std;
@@ -14,16 +15,19 @@ class Goblin;
 
 class Unit;
 
-class Elf : public Unit {
-  vector<pair<int, int>> find_targets(const vector<Goblin *> &, const Field &);
-  vector<pair<int, int>> find_targets(const vector<Goblin *> &, const Field &);
-  void move(vector<Goblin *> &, const Field &);
+class Vak;
+
+class Elf : virtual public Unit {
+  vector<Vak*> find_targets(const vector<Goblin *> &, const Field &);
+  Vak* find_closest(const vector<Goblin *> &, const Field &);
+  pair<int, int> find_dest(Vak *, const Field &);
+  void move(const vector<Goblin *> &, Field &);
 
 public:
   static int n;
 
-  void turn(vector<Elf *> &, const Field &){};
-  void turn(vector<Goblin *> &, const Field &);
+  void turn(vector<Elf *> &, Field &){};
+  void turn(vector<Goblin *> &, Field &);
 
   Elf(int x, int y) : Unit(x, y) { n++; };
   ~Elf() { n--; };

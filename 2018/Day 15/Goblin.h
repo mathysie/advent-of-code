@@ -15,13 +15,14 @@ class Field;
 class Unit;
 
 class Goblin : public Unit {
-  void move(vector<Elf *> &, const Field &);
+  vector<pair<int, int>> find_targets(const vector<Elf *> &, const Field &);
+  void move(vector<Elf *> &, Field &);
 
 public:
   static int n;
 
-  void turn(vector<Elf *> &, const Field &);
-  void turn(vector<Goblin *> &, const Field &){};
+  void turn(vector<Elf *> &, Field &);
+  void turn(vector<Goblin *> &, Field &){};
 
   Goblin(int x, int y) : Unit(x, y) { n++; };
   ~Goblin() { n--; };

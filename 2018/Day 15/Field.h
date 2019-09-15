@@ -6,7 +6,11 @@
 
 using namespace std;
 
-struct Field {
+class Vak;
+
+class Field {
+public:
+  int distance(Vak *, Vak *, int) const;
   vector<vector<Vak *>> veld;
   void print();
 };

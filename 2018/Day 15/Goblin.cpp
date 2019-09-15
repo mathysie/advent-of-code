@@ -1,9 +1,10 @@
 #include "Goblin.h"
 #include <algorithm>
+#include <exception>
 #include <iostream>
 
-vector<pair<int, int>> find_targets(const vector<Elf *> &elves,
-                                    const Field &field) {
+vector<pair<int, int>> Goblin::find_targets(const vector<Elf *> &elves,
+                                            const Field &field) {
   vector<pair<int, int>> tmp;
   for (auto g : elves) {
     pair<int, int> pos = g->pos;
@@ -24,7 +25,7 @@ vector<pair<int, int>> find_targets(const vector<Elf *> &elves,
   return tmp;
 }
 
-void Goblin::move(vector<Elf *> &elves, const Field &field) {
+void Goblin::move(vector<Elf *> &elves, Field &field) {
   char c[4] = {
       field.veld[pos.first - 1][pos.second]->val,
       field.veld[pos.first][pos.second - 1]->val,
@@ -41,6 +42,6 @@ void Goblin::move(vector<Elf *> &elves, const Field &field) {
   vector<pair<int, int>> targets = find_targets(elves, field);
 }
 
-void Goblin::turn(vector<Elf *> &elves, const Field &field) {
+void Goblin::turn(vector<Elf *> &elves, Field &field) {
   this->move(elves, field);
 }

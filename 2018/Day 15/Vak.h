@@ -6,12 +6,20 @@
 
 using namespace std;
 
+class Unit;
+
 class Vak {
 public:
   char val;
+  pair<int, int> pos;
   Unit *unit;
 
-  Vak(char c) { unit = NULL, val = c; };
+  bool isBlocked();
+
+  Vak(char c, unsigned int i, unsigned int j) : unit(NULL) {
+    val = c;
+    pos = make_pair(i, j);
+  };
   // Units worden elders opgeruimd.
   ~Vak() { unit = NULL; };
   // Geen move of copy instructies toestaan.

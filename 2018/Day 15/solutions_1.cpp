@@ -24,7 +24,7 @@ void initialize(Field &field, vector<Elf *> &elves, vector<Goblin *> &goblins) {
   for (unsigned int row = 0; getline(file, line); row++) {
     vector<Vak *> rij;
     for (unsigned int col = 0; col < line.size(); col++) {
-      Vak *vak = new Vak(line[col]);
+      Vak *vak = new Vak(line[col], row, col);
       rij.push_back(vak);
       if (line[col] == 'E') {
         Elf *elf = new Elf(row, col);
@@ -55,7 +55,7 @@ void destroy(Field &field, vector<Elf *> &elves, vector<Goblin *> &goblins) {
   }
 }
 
-void round(const Field &field, vector<Elf *> &elves,
+void round(Field &field, vector<Elf *> &elves,
            vector<Goblin *> &goblins) {
   for (unsigned int i = 0; i < field.veld.size(); i++) {
     for (unsigned int j = 0; j < field.veld[0].size(); j++) {
@@ -86,7 +86,7 @@ int main() {
 
   field.print();
 
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 4; i++) {
     round(field, elves, goblins);
     field.print();
   }
