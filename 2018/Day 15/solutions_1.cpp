@@ -7,8 +7,10 @@
 #include <chrono>
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <string>
 #include <vector>
+
 using namespace std;
 
 void display_time(const auto &start) {
@@ -18,8 +20,8 @@ void display_time(const auto &start) {
   cout << duration.count() << " milliseconds" << endl;
 }
 
-void initialize(Field &field, vector<Elf *> &elves, vector<Goblin *> &goblins) {
-  ifstream file("input.txt");
+void initialize(Field &field, list<Unit *> &units) {
+  ifstream file("inputtest.txt");
   string line;
   for (unsigned int row = 0; getline(file, line); row++) {
     vector<Vak *> rij;
@@ -27,12 +29,12 @@ void initialize(Field &field, vector<Elf *> &elves, vector<Goblin *> &goblins) {
       Vak *vak = new Vak(line[col], row, col);
       rij.push_back(vak);
       if (line[col] == 'E') {
-        Elf *elf = new Elf(row, col);
-        elves.push_back(elf);
+        Unit *elf = new Elf(row, col, true);
+        units.push_back(elf);
         vak->unit = elf;
       } else if (line[col] == 'G') {
-        Goblin *goblin = new Goblin(row, col);
-        goblins.push_back(goblin);
+        Goblin *goblin = new Goblin(row, col, false);
+        units.push_back(goblin);
         vak->unit = goblin;
       }
     }
@@ -41,33 +43,30 @@ void initialize(Field &field, vector<Elf *> &elves, vector<Goblin *> &goblins) {
   }
 }
 
-void destroy(Field &field, vector<Elf *> &elves, vector<Goblin *> &goblins) {
+void destroy(Field &field, list<Unit *> &units) {
   for (auto r : field.veld) {
     for (auto c : r) {
       delete c;
     }
   }
-  for (auto e : elves) {
-    delete e;
-  }
-  for (auto g : goblins) {
-    delete g;
+  for (auto u : units) {
+    delete u;
   }
 }
 
-void round(Field &field, vector<Elf *> &elves,
-           vector<Goblin *> &goblins) {
-  for (unsigned int i = 0; i < field.veld.size(); i++) {
-    for (unsigned int j = 0; j < field.veld[0].size(); j++) {
-      if (field.veld[i][j]->unit == NULL) {
-        continue;
-      } else if (field.veld[i][j]->val == 'E') {
-        Unit *elf = field.veld[i][j]->unit;
-        elf->turn(goblins, field);
-      } else if (field.veld[i][j]->val == 'G') {
-        Unit *goblin = field.veld[i][j]->unit;
-        goblin->turn(elves, field);
-      }
+bool isElf(Unit *const &u) { return u->isElf; }
+
+void round(Field &field, list<Unit *> &units) {
+  units.sort([](Unit *&u, Unit *&v) { return *u < *v; });
+  vector<Unit *> elves(Elf::n, NULL);
+  vector<Unit *> goblins(Goblin::n, NULL);
+  partition_copy(units.begin(), units.end(), elves.begin(), goblins.begin(),
+                 isElf);
+  for (auto u : units) {
+    if (u->isElf) {
+      u->turn(goblins, field);
+    } else {
+      u->turn(elves, field);
     }
   }
 }
@@ -79,19 +78,18 @@ int main() {
   auto start = chrono::high_resolution_clock::now();
 
   Field field;
-  vector<Elf *> elves;
-  vector<Goblin *> goblins;
+  list<Unit *> units;
 
-  initialize(field, elves, goblins);
+  initialize(field, units);
 
   field.print();
 
-  for (int i = 0; i < 4; i++) {
-    round(field, elves, goblins);
+  for (int i = 0; i < 3; i++) {
+    round(field, units);
     field.print();
   }
 
-  destroy(field, elves, goblins);
+  destroy(field, units);
 
   display_time(start);
   return 0;

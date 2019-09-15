@@ -2,31 +2,42 @@
 #define UNIT_H
 
 #include "Field.h"
+#include "Vak.h"
+#include <forward_list>
 #include <utility>
 #include <vector>
 
 using namespace std;
 
-class Elf;
-
 class Field;
 
-class Goblin;
+class Vak;
 
 class Unit {
   int ap;
 
+  forward_list<Vak *> find_targets(const vector<Unit *> &, const Field &);
+  Vak *find_closest(const vector<Unit *> &, const Field &);
+  pair<int, int> find_dest(Vak *, const Field &);
+  void move(const vector<Unit *> &, Field &);
+
 public:
+  void turn(vector<Unit *> &, Field &);
+
   int hp;
+  bool isElf;
   pair<unsigned int, unsigned int> pos;
 
-  virtual void turn(vector<Elf *> &, Field &) = 0;
-  virtual void turn(vector<Goblin *> &, Field &) = 0;
-
-  Unit(unsigned int x, unsigned int y) : ap(3), hp(200) {
+  Unit(unsigned int x, unsigned int y, bool elf) : ap(3), hp(200) {
     pos = make_pair(x, y);
+    isElf = elf;
   };
   virtual ~Unit(){};
+
+  bool operator<(const Unit &u) {
+    return pos.first < u.pos.first ||
+           (pos.first == u.pos.first && pos.second < u.pos.second);
+  }
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "Unit.h"
 #include <cstddef>
+#include <utility>
 
 using namespace std;
 
@@ -27,6 +28,15 @@ public:
   Vak &operator=(const Vak &) = delete;
   Vak(Vak &&) = delete;
   Vak &operator=(Vak &&) = delete;
+
+  bool operator<(const Vak &v) {
+    return pos.first < v.pos.first ||
+           (pos.first == v.pos.first && pos.second < v.pos.second);
+  }
+  bool operator==(const Vak &v) {
+    return pos.first == v.pos.first && pos.second == v.pos.second;
+  }
+  int man_dist(const Vak &);
 };
 
 #endif

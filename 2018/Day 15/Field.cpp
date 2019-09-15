@@ -1,19 +1,14 @@
 #include "Field.h"
 #include <climits>
-#include <cstring>
 #include <iostream>
 #include <set>
-
-int man_dist(Vak *s, Vak *t) {
-  return abs(s->pos.first - t->pos.first) + abs(s->pos.second - t->pos.second);
-}
 
 struct cell {
   Vak *vak;
   int f, g, h;
 
   cell() { f = g = h = INT_MAX; }
-  int calc_h(Vak *t) { return man_dist(vak, t); }
+  int calc_h(Vak *t) { return vak->man_dist(*t); }
   int calc_f() { return g + h; };
 };
 
@@ -24,7 +19,7 @@ void update_cell(const cell &orig, cell &cur, Vak *t, int &fnew, int &gnew,
   if (closedList[i][j] == false && !cur.vak->isBlocked()) {
     gnew = orig.g + 1;
     hnew = cur.calc_h(t);
-    fnew = cur.calc_f();
+    fnew = gnew + hnew;
 
     if (cur.f == INT_MAX || cur.f > fnew) {
       cur.f = fnew;
@@ -37,6 +32,9 @@ void update_cell(const cell &orig, cell &cur, Vak *t, int &fnew, int &gnew,
 }
 
 int Field::distance(Vak *s, Vak *t, int dmax) const {
+  if (*s == *t) {
+    return 0;
+  }
   unsigned long rows = veld.size(), cols = veld[0].size();
   vector<vector<bool>> closedList(rows, vector<bool>(cols, false));
 
@@ -56,7 +54,7 @@ int Field::distance(Vak *s, Vak *t, int dmax) const {
 
   while (!openList.empty()) {
     pair<int, pair<int, int>> p = *openList.begin();
-    if (p.first > dmax) {
+    if (p.first >= dmax) {
       return INT_MAX;
     }
 
