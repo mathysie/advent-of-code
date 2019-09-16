@@ -5,7 +5,7 @@
 #include "Vak.h"
 #include <forward_list>
 #include <utility>
-#include <vector>
+#include <unordered_set>
 
 using namespace std;
 
@@ -16,13 +16,15 @@ class Vak;
 class Unit {
   int ap;
 
-  forward_list<Vak *> find_targets(const vector<Unit *> &, const Field &);
-  Vak *find_closest(const vector<Unit *> &, const Field &);
+  forward_list<Vak *> find_targets(const unordered_set<Unit *> &, const Field &);
+  Vak *find_closest(const unordered_set<Unit *> &, const Field &);
   pair<int, int> find_dest(Vak *, const Field &);
-  void move(const vector<Unit *> &, Field &);
+  void move(const unordered_set<Unit *> &, Field &);
+  Unit* aim(const Field &);
+  void attack(unordered_set<Unit *> &, Field &);
 
 public:
-  void turn(vector<Unit *> &, Field &);
+  void turn(unordered_set<Unit *> &, Field &);
 
   int hp;
   bool isElf;

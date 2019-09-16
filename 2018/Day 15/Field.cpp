@@ -1,4 +1,5 @@
 #include "Field.h"
+#include "Unit.h"
 #include <climits>
 #include <iostream>
 #include <set>
@@ -95,8 +96,16 @@ int Field::distance(Vak *s, Vak *t, int dmax) const {
 void Field::print() {
   for (unsigned int i = 0; i < veld.size(); i++) {
     cout << i << ":\t";
+    vector<Unit*> units;
     for (auto vak : veld[i]) {
       cout << vak->val;
+      if (vak->val == 'E' || vak->val == 'G') {
+        units.push_back(vak->unit);
+      }
+    }
+    cout << "   ";
+    for (auto u: units) {
+      cout << (u->isElf ? 'E' : 'G') << "(" << u->hp << "), ";
     }
     cout << "\n";
   }

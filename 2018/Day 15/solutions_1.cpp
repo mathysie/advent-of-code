@@ -9,6 +9,7 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
@@ -21,7 +22,7 @@ void display_time(const auto &start) {
 }
 
 void initialize(Field &field, list<Unit *> &units) {
-  ifstream file("inputtest.txt");
+  ifstream file("input.txt");
   string line;
   for (unsigned int row = 0; getline(file, line); row++) {
     vector<Vak *> rij;
@@ -54,21 +55,57 @@ void destroy(Field &field, list<Unit *> &units) {
   }
 }
 
+void clean(list<Unit* >&units) {
+  for (auto it = units.begin(); it != units.end(); it++) {
+    if ((*it)->hp <= 0) {
+      auto it2 = it;
+      it--;
+      delete *it2;
+      units.erase(it2);
+    }
+  }
+}
+
 bool isElf(Unit *const &u) { return u->isElf; }
 
-void round(Field &field, list<Unit *> &units) {
+void round(Field &field, list<Unit *> &units, bool & finish) {
   units.sort([](Unit *&u, Unit *&v) { return *u < *v; });
-  vector<Unit *> elves(Elf::n, NULL);
-  vector<Unit *> goblins(Goblin::n, NULL);
-  partition_copy(units.begin(), units.end(), elves.begin(), goblins.begin(),
-                 isElf);
+  unordered_set<Unit *> elves;
+  unordered_set<Unit *> goblins;
   for (auto u : units) {
+    if (u->isElf) {
+      elves.insert(u);
+    } else {
+      goblins.insert(u);
+    }
+  }
+
+  for (auto u : units) {
+    if (u->hp <= 0) {
+      continue;
+    }
+    if (elves.size() == 0 || goblins.size() == 0) {
+      finish = true;
+      clean(units);
+      return;
+    }
     if (u->isElf) {
       u->turn(goblins, field);
     } else {
       u->turn(elves, field);
     }
   }
+
+  clean(units);
+}
+
+int count_hp(list<Unit *> units) {
+  int hp = 0;
+  for (auto u : units) {
+    hp += u->hp;
+  }
+
+  return hp;
 }
 
 int Elf::n = 0;
@@ -84,10 +121,21 @@ int main() {
 
   field.print();
 
-  for (int i = 0; i < 3; i++) {
-    round(field, units);
-    field.print();
+  int count = 0;
+  bool finish = false;
+  while (!finish) {
+    round(field, units, finish);
+    if (!finish) {
+      count++;
+    }
+    // cout << "Na ronde " << count << '\n';
+    // field.print();
   }
+
+  int hp = count_hp(units);
+  cout << "Afgelopen op ronde: " << count << endl;
+  cout << "HP is " << hp << endl;
+  cout << "Resultaat: " << count * hp << endl;
 
   destroy(field, units);
 
