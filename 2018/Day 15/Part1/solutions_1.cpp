@@ -1,6 +1,4 @@
-#include "Elf.h"
 #include "Field.h"
-#include "Goblin.h"
 #include "Unit.h"
 #include "Vak.h"
 #include <algorithm>
@@ -30,11 +28,11 @@ void initialize(Field &field, list<Unit *> &units) {
       Vak *vak = new Vak(line[col], row, col);
       rij.push_back(vak);
       if (line[col] == 'E') {
-        Unit *elf = new Elf(row, col, true);
+        Unit *elf = new Unit(row, col, true);
         units.push_back(elf);
         vak->unit = elf;
       } else if (line[col] == 'G') {
-        Goblin *goblin = new Goblin(row, col, false);
+        Unit *goblin = new Unit(row, col, false);
         units.push_back(goblin);
         vak->unit = goblin;
       }
@@ -108,9 +106,6 @@ int count_hp(list<Unit *> units) {
   return hp;
 }
 
-int Elf::n = 0;
-int Goblin::n = 0;
-
 int main() {
   auto start = chrono::high_resolution_clock::now();
 
@@ -119,8 +114,6 @@ int main() {
 
   initialize(field, units);
 
-  field.print();
-
   int count = 0;
   bool finish = false;
   while (!finish) {
@@ -128,14 +121,12 @@ int main() {
     if (!finish) {
       count++;
     }
-    // cout << "Na ronde " << count << '\n';
-    // field.print();
   }
 
   int hp = count_hp(units);
-  cout << "Afgelopen op ronde: " << count << endl;
-  cout << "HP is " << hp << endl;
-  cout << "Resultaat: " << count * hp << endl;
+  cout << "Afgelopen op ronde: " << count << ".\n";
+  cout << "HP is " << hp << ".\n";
+  cout << "Resultaat: " << count * hp << ".\n";
 
   destroy(field, units);
 
