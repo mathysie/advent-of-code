@@ -2,17 +2,39 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <array>
 
 #define OUT
 
-constexpr bool IsNumber(char c)
-{
-    return c >= '0' && c <= '9';
-}
+static const std::array<std::string, 20> c_arr_numbers{
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine"};
 
-constexpr int ToInt(char c)
+constexpr std::optional<int> CheckNumber(std::string_view svString)
 {
-    return c - '0';
+    for (int i = 0; i < c_arr_numbers.size(); i++)
+        if (svString.starts_with(c_arr_numbers[i]))
+            return i % 10;
+
+    return std::nullopt;
 }
 
 int main()
@@ -29,8 +51,27 @@ int main()
     std::string sLine;
     while (std::getline(OUT file, sLine))
     {
-        int iFirstDigit = ToInt(*std::find_if(sLine.begin(), sLine.end(), &IsNumber));
-        int iSecondDigit = ToInt(*std::find_if(sLine.rbegin(), sLine.rend(), &IsNumber));
+        const std::string_view svLine{sLine};
+
+        int iFirstDigit = 0;
+        for (int i = 0; i < sLine.size(); i++)
+        {
+            if (std::optional<int> digit = CheckNumber(svLine.substr(i)))
+            {
+                iFirstDigit = *digit;
+                break;
+            }
+        }
+
+        int iSecondDigit = 0;
+        for (int i = sLine.size() - 1; i >= 0; i--)
+        {
+            if (std::optional<int> digit = CheckNumber(svLine.substr(i)))
+            {
+                iSecondDigit = *digit;
+                break;
+            }
+        }
 
         iSum += iFirstDigit * 10 + iSecondDigit;
     }
