@@ -55,64 +55,165 @@ std::vector<std::vector<char>> ReadInput()
     return arr2_input;
 }
 
-int GetSumOfLine(const std::vector<std::vector<char>> &arr2_input, int iRow)
+void Part1(const std::vector<std::vector<char>> &arr2_input)
 {
-    int iSum = 0;
-    std::optional<int> foundNumber;
-    auto addFoundNumber = [&iSum, &foundNumber]()
+    int iTotalSum = 0;
+    for (int iRow = 0; iRow < static_cast<int>(arr2_input.size()); iRow++)
     {
-        iSum += foundNumber.value();
-        foundNumber = std::nullopt;
-    };
-
-    bool bNumberIsValid = false;
-    int nCols = static_cast<int>(arr2_input.size());
-    for (int iCol = 0; iCol < nCols; iCol++)
-    {
-        char currentChar = arr2_input[iRow][iCol];
-        if (IsDot(currentChar))
+        int iRowSum = 0;
+        std::optional<int> foundNumber;
+        auto addFoundNumber = [&iRowSum, &foundNumber]()
         {
-            if (foundNumber.has_value())
+            iRowSum += foundNumber.value();
+            foundNumber = std::nullopt;
+        };
+
+        bool bNumberIsValid = false;
+        int nCols = static_cast<int>(arr2_input.size());
+        for (int iCol = 0; iCol < nCols; iCol++)
+        {
+            char currentChar = arr2_input[iRow][iCol];
+            if (IsDot(currentChar))
             {
-                if (bNumberIsValid || AboveOrBelowIsSymbol(arr2_input, iRow, iCol))
-                    addFoundNumber();
-                else
-                    foundNumber = std::nullopt;
+                if (foundNumber.has_value())
+                {
+                    if (bNumberIsValid || AboveOrBelowIsSymbol(arr2_input, iRow, iCol))
+                        addFoundNumber();
+                    else
+                        foundNumber = std::nullopt;
+                }
+
+                bNumberIsValid = AboveOrBelowIsSymbol(arr2_input, iRow, iCol);
             }
+            else if (IsSymbol(currentChar))
+            {
+                bNumberIsValid = true;
+                if (foundNumber.has_value())
+                    addFoundNumber();
+            }
+            else if (IsNumber(currentChar))
+            {
+                bNumberIsValid = bNumberIsValid || AboveOrBelowIsSymbol(arr2_input, iRow, iCol);
+                foundNumber = foundNumber.value_or(0) * 10 + ToNumber(currentChar);
 
-            bNumberIsValid = AboveOrBelowIsSymbol(arr2_input, iRow, iCol);
+                if (iCol == nCols - 1 && bNumberIsValid)
+                    addFoundNumber();
+            }
+            else
+            {
+                throw std::logic_error("Nummer is de laatste mogelijkheid.");
+            }
         }
-        else if (IsSymbol(currentChar))
-        {
-            bNumberIsValid = true;
-            if (foundNumber.has_value())
-                addFoundNumber();
-        }
-        else if (IsNumber(currentChar))
-        {
-            bNumberIsValid = bNumberIsValid || AboveOrBelowIsSymbol(arr2_input, iRow, iCol);
-            foundNumber = foundNumber.value_or(0) * 10 + ToNumber(currentChar);
 
-            if (iCol == nCols - 1 && bNumberIsValid)
-                addFoundNumber();
+        iTotalSum += iRowSum;
+    }
+
+    std::cout << "Deel 1: " << iTotalSum << std::endl;
+}
+
+std::vector<std::pair<int, int>> GetNumberCoordinatesAroundStar(const std::vector<std::vector<char>> &arr2_input, int iRow, int iCol)
+{
+    int nCols = static_cast<int>(arr2_input[iRow].size());
+
+    std::vector<std::pair<int, int>> arr_numbers;
+    if (iCol > 0 && IsNumber(arr2_input[iRow][iCol - 1]))
+        arr_numbers.emplace_back(iRow, iCol - 1);
+
+    if (iCol < nCols && IsNumber(arr2_input[iRow][iCol + 1]))
+        arr_numbers.emplace_back(iRow, iCol + 1);
+
+    auto findDistinctNumbersInRow = [&arr2_input, &arr_numbers, iCol, nCols](int iLocalRow)
+    {
+        bool bNumberInRow = false;
+        if (iCol > 0 && IsNumber(arr2_input[iLocalRow][iCol - 1]))
+        {
+            bNumberInRow = true;
+            arr_numbers.emplace_back(iLocalRow, iCol - 1);
+        }
+        if (IsNumber(arr2_input[iLocalRow][iCol]))
+        {
+            if (!bNumberInRow)
+            {
+                arr_numbers.emplace_back(iLocalRow, iCol);
+                bNumberInRow = true;
+            }
         }
         else
         {
-            throw std::logic_error("Nummer is de laatste mogelijkheid.");
+            bNumberInRow = false;
+        }
+
+        if (iCol < nCols - 1 && IsNumber(arr2_input[iLocalRow][iCol + 1]) &&
+            !bNumberInRow)
+            arr_numbers.emplace_back(iLocalRow, iCol + 1);
+    };
+
+    if (iRow > 0)
+        findDistinctNumbersInRow(iRow - 1);
+    if (iRow < static_cast<int>(arr2_input.size()) - 1)
+        findDistinctNumbersInRow(iRow + 1);
+
+    return arr_numbers;
+}
+
+int GetGearRatio(const std::vector<std::vector<char>> &arr2_input, const std::vector<std::pair<int, int>> &arr_coordinates)
+{
+    if (arr_coordinates.size() != 2)
+        throw std::logic_error("Aantal coordinaten moet 2 zijn!");
+
+    auto GetNumber = [&arr2_input, &arr_coordinates](int iIndex)
+    {
+        auto [iRow, iCol] = arr_coordinates[iIndex];
+
+        // Zoek startpositie getal
+        while (iCol > 0 && IsNumber(arr2_input[iRow][iCol - 1]))
+            iCol--;
+
+        int iNumber = 0;
+        while (iCol < static_cast<int>(arr2_input[iRow].size()) &&
+               IsNumber(arr2_input[iRow][iCol]))
+        {
+            iNumber = iNumber * 10 + ToNumber(arr2_input[iRow][iCol]);
+            iCol++;
+        }
+
+        return iNumber;
+    };
+
+    int iFirstNumber = GetNumber(0);
+    int iSecondNumber = GetNumber(1);
+
+    return iFirstNumber * iSecondNumber;
+}
+
+void Part2(const std::vector<std::vector<char>> &arr2_input)
+{
+    int iTotalSum = 0;
+
+    for (int iRow = 0; iRow < static_cast<int>(arr2_input.size()); iRow++)
+    {
+        int nCols = static_cast<int>(arr2_input.size());
+        for (int iCol = 0; iCol < nCols; iCol++)
+        {
+            char currentChar = arr2_input[iRow][iCol];
+            if (currentChar == '*')
+            {
+                auto arr_numbersAroundStar = GetNumberCoordinatesAroundStar(arr2_input, iRow, iCol);
+                if (arr_numbersAroundStar.size() == 2)
+                    iTotalSum += GetGearRatio(arr2_input, arr_numbersAroundStar);
+            }
         }
     }
 
-    return iSum;
+    std::cout << "Deel 2: " << iTotalSum << std::endl;
 }
 
 int main()
 {
     std::vector<std::vector<char>> arr2_input = ReadInput();
 
-    int iSum = 0;
-    for (int iRow = 0; iRow < static_cast<int>(arr2_input.size()); iRow++)
-        iSum += GetSumOfLine(arr2_input, iRow);
+    Part1(arr2_input);
+    Part2(arr2_input);
 
-    std::cout << iSum << std::endl;
     return 0;
 }
