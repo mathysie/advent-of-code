@@ -6,20 +6,24 @@
 
 #define OUT
 
-bool IsColorValid(std::string_view sString, std::string_view svColor, int iMax)
+std::pair<bool, int> IsColorValidAndGetMax(std::string_view sString, std::string_view svColor, int iMaxForValid)
 {
+    bool bValid = true;
+    int iMaxFound = 0;
+
     std::smatch sm;
     std::regex regex(std::format(R"((\d+) {})", svColor));
-
     for (std::string sSearch{sString}; regex_search(sSearch, sm, regex);)
     {
-        if (stoi(sm[1]) > iMax)
-            return false;
+        int nBalls = std::stoi(sm[1]);
+        iMaxFound = std::max(nBalls, iMaxFound);
+        if (nBalls > iMaxForValid)
+            bValid = false;
 
         sSearch = sm.suffix();
     }
 
-    return true;
+    return {bValid, iMaxFound};
 }
 
 int main()
@@ -31,27 +35,37 @@ int main()
         return 1;
     }
 
-    int iSum = 0;
+    int iPart1Sum = 0;
+    int iPart2Sum = 0;
 
     std::string sLine;
     while (std::getline(OUT file, sLine))
     {
-        bool bValidGame = true;
         std::size_t iColonPos = sLine.find(':');
         std::string sGames = sLine.substr(iColonPos + 1);
 
-        if (!IsColorValid(sGames, "blue", 14))
-            continue;
+        bool bValidGame = true;
+        int iProduct = 1;
 
-        if (!IsColorValid(sGames, "red", 12))
-            continue;
+        auto checkColor = [&sGames, &bValidGame, &iProduct](std::string_view sColor, int iMax)
+        {
+            auto [bValid, nMaxBalls] = IsColorValidAndGetMax(sGames, sColor, iMax);
+            bValidGame = bValidGame && bValid;
+            iProduct *= nMaxBalls;
+        };
 
-        if (!IsColorValid(sGames, "green", 13))
-            continue;
+        checkColor("blue", 14);
+        checkColor("red", 12);
+        checkColor("green", 13);
 
-        iSum += std::stoi(sLine.substr(5, iColonPos));
+        if (bValidGame)
+            iPart1Sum += std::stoi(sLine.substr(5, iColonPos));
+
+        iPart2Sum += iProduct;
     }
 
-    std::cout << iSum << std::endl;
+    std::cout << "Deel 1: " << iPart1Sum << std::endl;
+    std::cout << "Deel 2: " << iPart2Sum << std::endl;
+
     return 0;
 }
