@@ -30,7 +30,7 @@ static const std::array<std::string, 20> c_arr_numbers{
 
 constexpr std::optional<int> CheckNumber(std::string_view svString)
 {
-    for (int i = 0; i < c_arr_numbers.size(); i++)
+    for (int i = 0; i < static_cast<int>(c_arr_numbers.size()); i++)
         if (svString.starts_with(c_arr_numbers[i]))
             return i % 10;
 
@@ -54,7 +54,7 @@ int main()
         const std::string_view svLine{sLine};
 
         int iFirstDigit = 0;
-        for (int i = 0; i < sLine.size(); i++)
+        for (int i = 0; i < static_cast<int>(sLine.size()); i++)
         {
             if (std::optional<int> digit = CheckNumber(svLine.substr(i)))
             {
@@ -64,7 +64,7 @@ int main()
         }
 
         int iSecondDigit = 0;
-        for (int i = sLine.size() - 1; i >= 0; i--)
+        for (int i = static_cast<int>(sLine.size()) - 1; i >= 0; i--)
         {
             if (std::optional<int> digit = CheckNumber(svLine.substr(i)))
             {

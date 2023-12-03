@@ -11,3 +11,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # add the executable
 add_executable(Day2 Day2.cpp)
+target_compile_options(Day2 PRIVATE -Werror -Wall -Wextra)
