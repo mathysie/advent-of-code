@@ -2,38 +2,20 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <range/v3/all.hpp>
-#include <set>
 #include <cmath>
+#include <range/v3/view/enumerate.hpp>
+#include <range/v3/numeric/accumulate.hpp>
+#include "Card.h"
 
 #define OUT
 
-int ToInt(ranges::any_view<char> arr_numChars)
-{
-    return ranges::accumulate(
-        arr_numChars, 0.,
-        [](int iRhs, int iLhs)
-        { return iRhs * 10 + iLhs; },
-        [](char c)
-        { return c - '0'; });
-}
-
-ranges::any_view<int> GetNumbersView(std::string_view sNumbers)
-{
-    return sNumbers |
-           ranges::views::split(' ') |
-           ranges::views::remove_if([](ranges::any_view<char, ranges::category::forward> view)
-                                    { return view.empty(); }) |
-           ranges::views::transform(ToInt);
-}
-
-int main()
+std::vector<CCard> ReadInput()
 {
     std::ifstream file("..\\Input.txt");
     if (!file.is_open())
         throw std::invalid_argument("Bestand niet open!");
 
-    int iSum = 0;
+    std::vector<CCard> arr_cards;
 
     std::string sLine;
     while (std::getline(OUT file, sLine))
@@ -44,18 +26,45 @@ int main()
         std::string sLuckyNumbers = sLine.substr(colonPos + 1, pipePos - colonPos - 1);
         std::string sMyNumbers = sLine.substr(pipePos + 1);
 
-        std::set<int> arr_luckyNumbers = GetNumbersView(sLuckyNumbers) |
-                                         ranges::to<std::set<int>>;
-
-        int nMatches = ranges::count_if(GetNumbersView(sMyNumbers),
-                                        [&arr_luckyNumbers](int iNumber)
-                                        { return arr_luckyNumbers.contains(iNumber); });
-
-        if (nMatches > 0)
-            iSum += std::pow(2, nMatches - 1);
+        arr_cards.emplace_back(sLuckyNumbers, sMyNumbers);
     }
 
-    std::cout << "Deel 1: " << iSum << std::endl;
+    return arr_cards;
+}
+
+void Part1(const std::vector<CCard> &arr_cards)
+{
+    int iPart1Sum = 0;
+
+    for (const CCard &card : arr_cards)
+    {
+        int nMatches = card.CountMatches();
+        if (nMatches > 0)
+            iPart1Sum += std::pow(2, nMatches - 1);
+    }
+
+    std::cout << "Deel 1: " << iPart1Sum << std::endl;
+}
+
+void Part2(const std::vector<CCard> &arr_cards)
+{
+    std::vector<int> arr_cardCounts(arr_cards.size(), 1);
+    for (auto [index, card] : arr_cards | ranges::views::enumerate)
+    {
+        int iCurrentCard = static_cast<int>(index);
+        int nMatches = card.CountMatches();
+        for (int iCard = iCurrentCard + 1; iCard <= std::min(iCurrentCard + nMatches, static_cast<int>(arr_cardCounts.size()) - 1); ++iCard)
+            arr_cardCounts[iCard] += arr_cardCounts[iCurrentCard];
+    }
+
+    std::cout << "Deel 2: " << ranges::accumulate(arr_cardCounts, 0) << std::endl;
+}
+
+int main()
+{
+    std::vector<CCard> arr_cards = ReadInput();
+    Part1(arr_cards);
+    Part2(arr_cards);
 
     return 0;
 }

@@ -10,7 +10,9 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # add the executable
-add_executable(Day4 Day4.cpp)
+add_executable(Day4
+    Day4.cpp
+    Card.cpp)
 
 find_package(range-v3 CONFIG REQUIRED)
 target_link_libraries(Day4 PRIVATE range-v3::range-v3)
