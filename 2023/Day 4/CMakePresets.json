@@ -1,0 +1,51 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "hidden": true,
+            "displayName": "Default Config",
+            "description": "Default build using Ninja generator",
+            "binaryDir": "${sourceDir}/build/default",
+            "toolchainFile": "c:/Sandboxes/vcpkg/scripts/buildsystems/vcpkg.cmake",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": {
+                    "value": "x64-windows",
+                    "type": "STRING"
+                }
+            }
+        },
+        {
+            "name": "Ninja",
+            "inherits": "default",
+            "displayName": "Ninja Multi-Config",
+            "description": "Default build using Ninja Multi-Config generator",
+            "generator": "Ninja Multi-Config"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug Ninja",
+            "configurePreset": "Ninja",
+            "configuration": "Debug",
+            "resolvePackageReferences": "on",
+            "nativeToolOptions": [
+                "-k0"
+            ]
+        },
+        {
+            "name": "Release Ninja",
+            "configurePreset": "Ninja",
+            "configuration": "Release",
+            "resolvePackageReferences": "on",
+            "nativeToolOptions": [
+                "-k0"
+            ]
+        }
+    ]
+}
